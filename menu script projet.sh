@@ -136,13 +136,14 @@ do
     echo "--- Menu de l'utilisateur ---"
     echo "1) Action sur l'utilisateur"
     echo "2) Information sur l'utilisateur" 
-
+    echo "3) Quitter"
+    
 read -p "Choissisez une option :" choice
 
 case $choice in
-        1) function sous_menu_action_user
+        1) sous_menu_action_user
                 ;;
-        2) function sous_menu_information_user
+        2) sous_menu_information_user
                 ;;
         3) exit
                 ;;
@@ -161,13 +162,14 @@ do
     echo "--- Menu de l'ordinateur ---"
     echo "1) Action sur l'ordinateur"
     echo "2) Information sur l'ordinateur" 
+    echo "3) Quitter"
 
 read -p "Choissisez une option :" choice
 
 case $choice in
-        1) function sous_menu_action_computer
+        1) sous_menu_action_computer
                 ;;
-        2) function sous_menu_information_computer
+        2) sous_menu_information_computer
                 ;;
         3) exit
                 ;;
@@ -208,11 +210,11 @@ do
 read -p "Choissisez une option :" choice
 
 case $choice in
-        1) function Menu_gestionuser
+        1) Menu_gestionuser
                 ;;
-        2) function Menu_gestionmachine
+        2) Menu_gestionmachine
                 ;;
-        3) function journal
+#        3) journal
                 ;;
         4) exit
                 ;;
