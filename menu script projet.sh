@@ -11,7 +11,8 @@ do
         echo "-------Sous Menu Action user ---------"
         echo "1. Utilisateur"
         echo "2. Groupes"
-        echo "3. Sortir"
+        echo "3. Revenir au menu précedent"
+	echo "4. Quitter"
 
 read -p "Choissisez une option :" choice
 
@@ -20,8 +21,10 @@ case $choice in
                 ;;
         2) source script_group.sh
                 ;;
-        3) echo "Sortie du scrip"
-           break;
+        3) break
+           	;;
+	4) echo "Sortie du script"
+	   exit
                 ;;
         *) echo "Option incorrect"
                 ;;
@@ -31,14 +34,15 @@ done
   
 
 # Fonction pour gerer le sous Menu information utilisateur 
-function sous_menu_information_computer ()
+function sous_menu_information_user ()
 {
 while true
 do
-        echo "-------Sous Menu info user ---------"
+        echo "-------Sous Menu information utilisateur ---------"
         echo "1. Utilisateur"
         echo "2. Droit"
-        echo "3. Sortir"
+        echo "3. Revenir au menu précedent"
+	echo "4. Quitter"
 
 read -p "Choissisez une option :" choice
 
@@ -47,13 +51,14 @@ case $choice in
                 ;;
         2) source script_right.sh
                 ;;
-        3) echo "Sortie du scrip"
-           break;
+        3) break;
                 ;;
+	4) echo "Sortie du script"
+	   exit
+	        ;;
         *) echo "Option incorrect"
                 ;;
 esac
-
 done 
 }
 
@@ -68,7 +73,8 @@ do
         echo "3. Repertoire"
         echo "4. Securité"
         echo "5. Software"
-        echo "6. Sortie"
+        echo "6. Revenir au menu précedent"
+        echo "7. Quitter"
 
 read -p "Choissisez une option :" choice
 
@@ -83,13 +89,13 @@ case $choice in
                 ;;
         5) source script_software.sh
                 ;;
-        6) echo "Sortie du scrip"
-           break;
+        6) break
+                ;;
+        7) exit
                 ;;
         *) echo "Option incorrect"
                 ;;
 esac
-
 done 
 }
 
@@ -103,7 +109,8 @@ do
         echo "2. Disque"
         echo "3. Task Manager"
         echo "4. System"
-        echo "6. Sortie"
+        echo "5. Revenir au menu précedent"
+	echo "6. Quitter"
 
 read -p "Choissisez une option :" choice
 
@@ -116,13 +123,13 @@ case $choice in
                 ;;
         4) source script_systeme.sh
                 ;;
-        5) echo "Sortie du scrip"
-           break;
+        5) break
                 ;;
+	6) exit
+		;;
         *) echo "Option incorrect"
                 ;;
 esac
-
 done 
 }
 
@@ -135,23 +142,26 @@ while true
 do 
     echo "--- Menu de l'utilisateur ---"
     echo "1) Action sur l'utilisateur"
-    echo "2) Information sur l'utilisateur" 
+    echo "2) Information sur l'utilisateur"
+    echo "3) Revenir au menu précedent" 
+    echo "4) Quitter"
 
 read -p "Choissisez une option :" choice
 
 case $choice in
-        1) function sous_menu_action_user
+        1) sous_menu_action_user
+		;;
+       	2) sous_menu_information_user
+		;;
+        3) break
                 ;;
-        2) function sous_menu_information_user
+        4) exit 
                 ;;
-        3) exit
-                ;;
+        *) echo "Option incorrect"
+		
 esac
 done
 }
-
-
-
 
 # Fonction pour gerer le Menu Gestion de l'ordinateur
 function Menu_gestionmachine ()
@@ -160,25 +170,24 @@ while true
 do 
     echo "--- Menu de l'ordinateur ---"
     echo "1) Action sur l'ordinateur"
-    echo "2) Information sur l'ordinateur" 
+    echo "2) Information sur l'ordinateur"
+    echo "3) Revenir au menu précedent"
+    echo "4) Quitter" 
 
 read -p "Choissisez une option :" choice
 
 case $choice in
-        1) function sous_menu_action_computer
-                ;;
-        2) function sous_menu_information_computer
-                ;;
-        3) exit
-                ;;
+        1) sous_menu_action_computer;;
+	2) sous_menu_info_computer;;
+        3) break;;
+        4) exit;;
+        *) echo "Option incorrect"
 esac
 done
 }
 
-
-
 # Menu Journal
-#function journal ()
+#function Journal ()
 #{
 #read -p "Choissisez une option :" choice
 
@@ -190,7 +199,7 @@ done
  #       1) ligne de commande log user
   #              ;;
    #     2) ligne de commande log ordinateur
-    #            ;;
+    #            
     #esac
     #done
 #}
@@ -208,14 +217,17 @@ do
 read -p "Choissisez une option :" choice
 
 case $choice in
-        1) function Menu_gestionuser
+        1) Menu_gestionuser
                 ;;
-        2) function Menu_gestionmachine
+        2) Menu_gestionmachine
                 ;;
-        3) function journal
+        3) Journal
                 ;;
         4) exit
                 ;;
+        *) echo "Option incorrect"
+               
 esac
 done
+
 
