@@ -211,7 +211,7 @@ do
     echo "--- Menu Principal---"
     echo "1) Gestion de l'utilisateur"
     echo "2) Gestion de la machine"
-    echo "3) Edition journal"
+    echo "3) Consultation des journaux"
     echo "4) Sortir"
 
 read -p "Choissisez une option :" choice
