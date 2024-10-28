@@ -11,7 +11,7 @@ do
     echo "--- Menu de l'utilisateur ---"
     echo "1) Action sur l'utilisateur"
     echo "2) Information sur l'utilisateur"
-    echo "3) Revenir au menu précédent" 
+    echo "3) Revenir au menu principal" 
     echo "4) Quitter"
 
     read -p "Choisissez une option : " choice
@@ -38,7 +38,7 @@ do
     echo "--- Menu de l'ordinateur ---"
     echo "1) Action sur l'ordinateur"
     echo "2) Information sur l'ordinateur"
-    echo "3) Revenir au menu précédent"
+    echo "3) Revenir au menu principal"
     echo "4) Quitter" 
 
     read -p "Choisissez une option : " choice
