@@ -1,7 +1,9 @@
 #!/bin/bash
 
 # Demander la machine d'intervention
-#read -p "Entrez l'adresse IP ou le nom de la machine distante : " Client  # variable $Client représente la location de l'intervention
+read -p "Entrez l'adresse IP ou le nom de la machine distante : " Client  # variable $Client représente la location de l'intervention
+read -p "Avec quel utilisateur souhaitez-vous vous connecter ? :" User
+ssh $user@$client
 
 # Fonction pour gérer le Menu utilisateur
 function Menu_gestion_user ()
