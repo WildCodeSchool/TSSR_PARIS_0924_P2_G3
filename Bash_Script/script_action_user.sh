@@ -28,7 +28,7 @@ function ask_continue ()
 # Fonction qui permet de créer un compte utilisateur
 function user_creation 
 {
-
+    clear
     echo "Création du compte utilisateur local"
     read -p "Entrez le nom du compte à créer : " newUser
 
@@ -65,6 +65,7 @@ function password_change
 #Vérification de l'existence du compte
 
 while 
+        clear
         user_name 
         ! grep -w "$USERNAME" /etc/passwd > /dev/null
 #Le compte n'existe pas
@@ -76,7 +77,9 @@ done
 
 }
 #Fonction qui permet de supprimer un compte utilisateur
-function user_deletion {
+function user_deletion 
+{
+    clear
     echo "Suppression de compte utilisateur local"
     read -p "Entrez un nom du compte à supprimer : " supUser
 #Tester l'existance du compte dans le système
@@ -105,8 +108,11 @@ fi
 
 ask_continue
 }
-
-function user_disable {
+# Définition des fonctions qui vont agir sur l'utilisateur
+# Fonction de désactivation du compte utlisateur
+function user_disable 
+{
+    clear
     echo "Désactivation de compte utilisateur local"
     read -p "Entrez le nom du compte à désactiver : " desUser
 #Tester l'existance du compte dans le système
@@ -143,6 +149,7 @@ function add_group {
 #Vérification de l'existence du compte
 
 while 
+    clear
     user_name 
     ! grep -w "$USERNAME" /etc/passwd > /dev/null
 #Le compte n'existe pas
@@ -175,6 +182,7 @@ function delete_group
 #Vérification de l'existence du compte
 
 while 
+    clear
     user_name 
     ! grep -w "$USERNAME" /etc/passwd > /dev/null
 #Le compte n'existe pas
@@ -205,6 +213,7 @@ ask_continue
 
 while true
 do
+    clear
 	echo "==========Menu Action de l'utilisateur=========="
 	echo "----------Utilisateur----------"
     echo "1) Création de compte utilisateur local"

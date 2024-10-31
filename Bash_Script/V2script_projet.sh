@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # Demander la machine d'intervention
+clear
 read -p "Entrez l'adresse IP ou le nom de la machine distante : " Client  # variable $Client représente la location de l'intervention
 read -p "Avec quel utilisateur souhaitez-vous vous connecter ? :" User
 ssh $user@$client
@@ -10,6 +11,7 @@ function Menu_gestion_user ()
 {
 while true
 do 
+    clear
     echo "--- Menu de l'utilisateur ---"
     echo "1) Action sur l'utilisateur"
     echo "2) Information sur l'utilisateur"
@@ -37,6 +39,7 @@ function Menu_gestion_computer ()
 {
 while true
 do 
+    clear
     echo "--- Menu de l'ordinateur ---"
     echo "1) Action sur l'ordinateur"
     echo "2) Information sur l'ordinateur"
@@ -64,6 +67,7 @@ function Journal ()
 {
     while true
     do
+        clear
         echo "------- Menu Journal ---------"
         echo "1) Événements sur l'utilisateur"
         echo "2) Événements sur l'ordinateur"
@@ -83,6 +87,7 @@ function Journal ()
 # Menu principal
 while true
 do 
+    clear
     echo "--- Menu Principal ---"
     echo "1) Gestion de l'utilisateur"
     echo "2) Gestion de la machine"
