@@ -17,25 +17,30 @@ function ask_continue {
 # Fonction qui permet d'arrêter la machine
 function stop() {
     echo "Arrêt de la machine"
-    ssh $USER@$CLIENT "sudo shutdown now"
+    sudo shutdown now
+    
 
 }
 # Fonction qui permet de redémarrer la machine
 function reboot() {
     echo "Redémarrage de la machine"
-    ssh $USER@$CLIENT "sudo reboot"
+    sudo reboot
+   
 
 }
 # Fonction qui permet de verrouiller la machine
 function lock() {
     echo "Verrouillage de la machine"
-    ssh $USER@$CLIENT "sudo vlock"
+    sudo vlock
+    
+   
 
 }
 # Fonction qui permet de mettre à jour le systeme
 function update_system() {
     echo "Mise-à-jour du système"
-    ssh $USER@$CLIENT "sudo apt update && apt upgrade -y"
+    sudo apt update && apt upgrade -y
+    ask_continue
 
 }
 # Fonction qui permet de prendre la main à distance
@@ -43,32 +48,41 @@ function remote_control() {
     read -p "Entrez l'adresse IP ou le nom d'hôte de la machine distante : " CLIENT
     read -p "Entrez le nom d'utilisateur : " USERNAME
     echo "Connexion à $USERNAME@$CLIENT"
-    if ssh "$USERNAME@$CLIENT"; then
+    if ssh $USERNAME@$CLIENT; then
         echo "Connexion réussie !"
     else
         echo "Échec de la connexion."
     fi
+    ask_continue
 
 }
 # Fonction qui permet de créer un répertoire
-function directory_creation() {
-    read -p "Quel est le nom du dossier à créer ? DIRECTORY
-if [ -d $DIRECTORY ]
-then                                                #si le dossier existe
-    echo "Le dossier existe déja"
-    exit 1
-else                                                #si le dossier n'existe pas
-    read -p "Où souhaitez vous le créer ?" WHERE
-    ssh $USER@$CLIENT sudo mkdir -p $WHERE/$DIRECTORY
-    echo "Le dossier $DIRECTORY a bien été crée"
-    exit 0
-fi
+    function directory_creation() {
+    read -p "Quel est le nom du dossier à créer ? " DIRECTORY
 
+    # Vérifie si le dossier existe déjà dans le répertoire spécifié
+    if [ -d $DIRECTORY ]; then
+        echo "Le dossier existe déjà."
+        exit 1
+    else
+        read -p "Où souhaitez-vous le créer ? " WHERE
+        
+        # Crée le dossier avec le chemin spécifié
+        sudo mkdir -p $WHERE/$DIRECTORY
+        echo "Le dossier $DIRECTORY a bien été créé."
+        exit 0
+    fi
+    ask_continue
 }
+
+
 # Fonction qui permet de modifier un répertoire
 function directory_change() {
-    read -p "Quel dossier souhaitez vous modifier ?
+    read -p "Quel dossier souhaitez vous modifier ?" DIRECTORY
+    read -p "Ou souhaitez-vous l'enregistrer ? " WHERE
+    cp -r $DIRECTORY $WHERE
     echo "Modification du répertoire"
+    ask_continue
 
 }
 # Fonction qui permet de supprimer un répertoire
@@ -76,9 +90,9 @@ function directory_deletion() {
     read -p "Quel dossier souhaitez-vous supprimer ? " DIRECTORY
     if [ -d "$DIRECTORY" ]; then # verification si le dossier existe
         echo "Il s'agit bien d'un dossier présent."
-        read -p "Êtes-vous sûr de vouloir le supprimer (oui/non) ? " confirm
+        read -p "Êtes-vous sûr de vouloir le supprimer ? (oui/non)" confirm
         if [ "$confirm" = "oui" ]; then
-            rmdir "$DIRECTORY" # suppression
+            rmdir $DIRECTORY # suppression
             echo "Le dossier $DIRECTORY a bien été supprimé."
         else
             echo "Suppression annulée."
@@ -87,11 +101,13 @@ function directory_deletion() {
         echo "Le dossier n'existe pas."
         exit 1
     fi
+    ask_continue
 }
 
 # Fonction qui permet de définir les règles de pare-feu
 function firewall_rules() {
     echo "Définition de règles de pare-feu"
+    ask_continue
 
 }
 # Fonction qui permet d'activer les pare-feu
@@ -104,6 +120,7 @@ function firewall_activation() {
     sudo ufw enable #activation
     echo "Le pare-feu a été activé."
     sudo ufw status #verification
+    ask_continue
 
 }
 # Fonction qui permet de désactiver les pare-feu
@@ -112,6 +129,7 @@ function firewall_desactivation() {
     sudo ufw disable
     echo "Le pare-feu a été désactivé."
     sudo ufw status
+    ask_continue
 
 }
 # Fonction qui permet de d'installer un logiciel
@@ -124,6 +142,7 @@ function software_install() {
     else
         echo "Échec de l'installation de $SOFTWARE"
     fi
+    ask_continue
 
 }
 # Fonction qui permet de désinstaller un logiciel
@@ -136,6 +155,7 @@ function software_uninstall() {
     else
         echo "Échec de la désinstallation de $SOFTWARE"
     fi
+    ask_continue
 }
 # Fonction qui permet d'exécuter un script sur la machine distante
 function remote_execution() {
@@ -153,6 +173,7 @@ function remote_execution() {
     else
         echo "Échec de l'exécution du script sur $HOST."
     fi
+    ask_continue
 
 }
 
