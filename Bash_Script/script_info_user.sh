@@ -28,7 +28,7 @@ function last_connexion ()
 
     user_name
     echo "Date de dernière connexion de l'utilisateur $USERNAME :"
-    last -n 1 "$USERNAME"
+    ssh -t $USER@$CLIENT last -n 1 "$USERNAME"
     ask_continue 
         
 }
