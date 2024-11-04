@@ -14,6 +14,12 @@ Ce projet vise à créer un script qui s'exécute sur une machine locale et perm
 
 ## Étapes du projet
 
+Créer deux fichiers log un pour les users un pour les machines. 
+Créer le menu principale 
+Crée les scripts
+Tester en local 
+Ajouter la fonction log et ssh sur chaque scripts 
+
 ## Choix Technique
 
 ## Difficultés rencontrées et Solutions trouvées
