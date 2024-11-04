@@ -1,6 +1,10 @@
 #!bin/bash
 
 #Menu des informations sur l'ordinateur
+read -p "Avec quel utilisateur ?" USER
+read -p "Sur quel machine ? CLIENT
+MDP="Azerty1*"
+
 function ask_continue {
     while true; do
         read -p "Voulez-vous effectuer une autre action ? (o/n) : " CONTINUE
@@ -56,50 +60,58 @@ while true; do
     case $choice in
     1)
         echo "Version de l'OS : "
-        ssh $USER@$CLIENT lsb_release -a
+        sshpass -p $MDP ssh $USER@$CLIENT lsb_release -a
         ask_continue
         ;;
     2)
         echo "Nombre de disque: "
-        ssh $USER@$CLIENT df -h
+        sshpass -p $MDP ssh $USER@$CLIENT df -h
         ask_continue
         ;;
     3)
         echo "Partition (nombre, nom, FS, taille) par disque : "
-        ssh $USER@$CLIENT lsblk -o NAME,SIZE,FSTYPE,MOUNTPOINT
+        sshpass -p $MDP ssh $USER@$CLIENT lsblk -o NAME,SIZE,FSTYPE,MOUNTPOINT
         ask_continue
         ;;
     4)
         echo "Liste des applications/paquets installées "
-        ssh $USER@$CLIENT dpkg --get-selections 
+        sshpass -p $MDP ssh $USER@$CLIENT dpkg --get-selections 
+        ask_continue
         ;;
     5)
         echo "Liste des services en cours d'execution"
-        ssh $USER@$CLIENT systemctl list-units --type=service --state=running
+        sshpass -p $MDP ssh $USER@$CLIENT systemctl list-units --type=service --state=running
+        ask_continue
         ;;
     6)
         echo "Liste des utilisateurs locaux"
-        ssh $USER@$CLIENT cut -d: -f1 /etc/passwd
+        sshpass -p $MDP ssh $USER@$CLIENT cut -d: -f1 /etc/passwd
+        ask_continue
         ;;
     7)
         echo "CPU Information :"
-        ssh $USER@$CLIENT lscpu
+        sshpass -p $MDP ssh $USER@$CLIENT lscpu
+        ask_continue
         ;;
     8)
         echo "Mémoire RAM totale"
-        ssh $USER@$CLIENT free -h -t
+        sshpass -p $MDP ssh $USER@$CLIENT free -h -t
+        ask_continue
         ;;
     9)
         echo "Utilisation de la RAM"
-        ssh $USER@$CLIENT free -h
+        sshpass -p $MDP ssh $USER@$CLIENT free -h
+        ask_continue
         ;;
     10)
         echo "Utilisation du disque"
-        ssh $USER@$CLIENT df -h
+        sshpass -p $MDP ssh $USER@$CLIENT df -h
+        ask_continue
         ;;
     11)
         echo "Utilisation du processeur :"
-        ssh $USER@$CLIENT top -b -n1 | grep "Cpu(s)"
+        sshpass -p $MDP ssh $USER@$CLIENT top -b -n1 | grep "Cpu(s)"
+        ask_continue
 
         ;;
     12)
