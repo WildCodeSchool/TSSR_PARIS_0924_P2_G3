@@ -44,7 +44,7 @@ else
     #Afficher un message et créé le compte utilisteur
    
     echo "Création de l'utilisateur $newUser"
-    sudo useradd $newUser > /dev/null 
+    ssh -t $USER@$CLIENT sudo useradd $newUser > /dev/null 
  
     #Vérification de la création du compte utilisateur
     if cat /etc/passwd | grep $newUser > /dev/null
@@ -73,7 +73,7 @@ do
     echo "Le compte utilisateur $USERNAME n'existe pas."
 #Le compte existe
 done
-   sudo passwd $USERNAME
+   ssh -t $USER@$CLIENT sudo passwd $USERNAME
 
 }
 #Fonction qui permet de supprimer un compte utilisateur
@@ -126,7 +126,7 @@ function user_disable
             [nN]) exit ;;    # Quitte le script
             *) echo "Veuillez entrer 'o' pour oui ou 'n' pour non." ;;
         esac
-   if sudo passwd -S $desUser | grep -q "L"
+   if ssh -t $USER@$CLIENT sudo passwd -S $desUser | grep -q "L"
    then
        #Le compte utilisateur est désactivée
        echo "Le compte $desUser est désactivée ! " 
@@ -166,7 +166,7 @@ done
 #Le groupe existe
     done
         if
-            sudo usermod -aG "$GROUPNAME" "$USERNAME"
+           ssh -t $USER@$CLIENT sudo usermod -aG "$GROUPNAME" "$USERNAME"
         then
             echo "L'utilisateur $USERNAME a été ajouté au groupe $GROUPNAME avec succès."
         else
@@ -199,7 +199,7 @@ done
 #Le groupe existe
     done
         if
-            sudo gpasswd -d "$USERNAME" "$GROUPNAME"
+            ssh -t $USER@$CLIENT sudo gpasswd -d "$USERNAME" "$GROUPNAME"
         then
             echo "L'utilisateur $USERNAME a été retiré du groupe $GROUPNAME avec succès."
         else
