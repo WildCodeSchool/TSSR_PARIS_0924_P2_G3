@@ -17,25 +17,25 @@ function ask_continue {
 # Fonction qui permet d'arrêter la machine
 function stop() {
     echo "Arrêt de la machine"
-    ssh -t wilder@192.168.56.106 sudo shutdown now
+    ssh -t $USER@$CLIENT sudo shutdown now
 
 }
 # Fonction qui permet de redémarrer la machine
 function reboot() {
     echo "Redémarrage de la machine"
-    ssh -t wilder@192.168.56.106 sudo reboot
+    ssh -t $USER@$CLIENT sudo reboot
 
 }
 # Fonction qui permet de verrouiller la machine
 function lock() {
     echo "Verrouillage de la machine"
-    ssh -t wilder@192.168.56.106 sudo vlock
+    ssh -t $USER@$CLIENT sudo vlock
 
 }
 # Fonction qui permet de mettre à jour le systeme
 function update_system() {
     echo "Mise-à-jour du système"
-    ssh -t wilder@192.168.56.106 sudo apt update && apt upgrade -y
+    ssh -t $USER@$CLIENT sudo apt update && apt upgrade -y
     ask_continue
 
 }
@@ -44,7 +44,7 @@ function remote_control() {
     read -p "Entrez l'adresse IP ou le nom d'hôte de la machine distante : " CLIENT
     read -p "Entrez le nom d'utilisateur : " USERNAME
     echo "Connexion à $USERNAME@$CLIENT"
-    if ssh $USERNAME@$CLIENT; then
+    if ssh -t $USER@$CLIENT; then
         echo "Connexion réussie !"
     else
         echo "Échec de la connexion."
@@ -64,7 +64,7 @@ function directory_creation() {
         read -p "Où souhaitez-vous le créer ? " WHERE
 
         # Crée le dossier avec le chemin spécifié
-        ssh -t wilder@192.168.56.106 sudo mkdir -p $WHERE/$DIRECTORY
+        ssh -t $USER@$CLIENT sudo mkdir -p $WHERE/$DIRECTORY
         echo "Le dossier $DIRECTORY a bien été créé."
         exit 0
     fi
@@ -75,7 +75,7 @@ function directory_creation() {
 function directory_change() {
     read -p "Quel dossier souhaitez vous modifier ?" DIRECTORY
     read -p "Ou souhaitez-vous l'enregistrer ? " WHERE
-    ssh -t wilder@192.168.56.106 cp -r $DIRECTORY $WHERE
+    ssh -t $USER@$CLIENT cp -r $DIRECTORY $WHERE
     echo "Modification du répertoire"
     ask_continue
 
@@ -87,7 +87,7 @@ function directory_deletion() {
         echo "Il s'agit bien d'un dossier présent."
         read -p "Êtes-vous sûr de vouloir le supprimer ? (oui/non)" confirm
         if [ "$confirm" = "oui" ]; then
-            ssh -t wilder@192.168.56.106 rmdir $DIRECTORY # suppression
+            ssh -t $USER@$CLIENT sudo rmdir $DIRECTORY # suppression
             echo "Le dossier $DIRECTORY a bien été supprimé."
         else
             echo "Suppression annulée."
@@ -110,20 +110,20 @@ function firewall_activation() {
     echo "Activation du pare-feu"
     if ! command -v ufw &>/dev/null; then
         echo "UFW n'est pas installé. Installation en cours..."
-        ssh -t wilder@192.168.56.106 sudo apt-get update && sudo apt-get install ufw -y
+        ssh -t $USER@$CLIENT sudo apt-get update && sudo apt-get install ufw -y
     fi
-    ssh -t wilder@192.168.56.106 sudo ufw enable #activation
+    ssh -t $USER@$CLIENT sudo ufw enable #activation
     echo "Le pare-feu a été activé."
-    ssh -t wilder@192.168.56.106 sudo ufw status #verification
+    ssh -t $USER@$CLIENT sudo ufw status #verification
     ask_continue
 
 }
 # Fonction qui permet de désactiver les pare-feu
 function firewall_desactivation() {
     echo "Désactivation du pare-feu"
-    ssh -t wilder@192.168.56.106 sudo ufw disable
+    ssh -t $USER@$CLIENT sudo ufw disable
     echo "Le pare-feu a été désactivé."
-    ssh -t wilder@192.168.56.106 sudo ufw status
+    ssh -t $USER@$CLIENT sudo ufw status
     ask_continue
 
 }
@@ -131,7 +131,7 @@ function firewall_desactivation() {
 function software_install() {
     read -p "Entrez le nom du logiciel à installer : " SOFTWARE
     echo "Installation du logiciel $SOFTWARE"
-    ssh -t wilder@192.168.56.106 sudo apt-get update && sudo apt-get install -y $SOFTWARE #installation
+    ssh -t $USER@$CLIENT sudo apt-get update && sudo apt-get install -y $SOFTWARE #installation
     if [ $? -eq 0 ]; then                                    #verification
         echo "$SOFTWARE a été installé avec succès."
     else
@@ -144,7 +144,7 @@ function software_install() {
 function software_uninstall() {
     read -p "Entrez le nom du logiciel à désinstaller : " SOFTWARE
     echo "Désinstallation du logiciel $SOFTWARE"
-    ssh -t wilder@192.168.56.106 sudo apt-get remove --purge -y $SOFTWARE
+    ssh -t $USER@$CLIENT sudo apt-get remove --purge -y $SOFTWARE
     if [ $? -eq 0 ]; then #verification
         echo "$SOFTWARE a été désinstallé avec succès."
     else
