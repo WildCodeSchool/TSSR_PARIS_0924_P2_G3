@@ -1,10 +1,34 @@
-#!bin/bash
+#!/bin/bash
 
-#Menu des informations sur l'ordinateur
-read -p "Avec quel utilisateur ?" USER
-read -p "Sur quel machine ? CLIENT
-MDP="Azerty1*"
+# Définition des couleurs
+RED='\033[0;31m'
+BLUE='\033[0;34m'
+GREEN='\033[0;32m'
+NC='\033[0m' # Aucune couleur
 
+# Chemin vers le fichier log
+LOG_FILE="\\wsl.localhost\Ubuntu\home\raya\user.log"
+
+# Fonction de journalisation
+function log {
+    echo "$(date "+%Y-%m-%d %H:%M:%S") - $1" >>$LOG_FILE
+}
+
+# Demande les informations de connexion
+function get_connection_info {
+    echo -e "${GREEN}Entrez le nom d'utilisateur avec lequel vous souhaitez vous connecter :${NC}"
+    read USERDISTANT
+    echo -e "${GREEN}Entrez l'adresse IP ou le nom d'hôte de la machine distante :${NC}"
+    read CLIENT
+    log "Informations de connexion via SSH - Utilisateur : $USERDISTANT, Client : $CLIENT"
+}
+
+# Commande pour lancer le ssh en fonction des variables
+function ssh_exe {
+    ssh "$USERDISTANT@$CLIENT" "$1"
+}
+
+# Demande si l'utilisateur souhaite continuer dans le script ou quitter
 function ask_continue {
     while true; do
         read -p "Voulez-vous effectuer une autre action ? (o/n) : " CONTINUE
@@ -15,11 +39,6 @@ function ask_continue {
         esac
     done
 }
-# Définition des couleurs
-RED='\033[0;31m'
-BLUE='\033[0;34m'
-YELLOW='\033[0;33m'
-NC='\033[0m' # Aucune couleur
 
 # Menu
 
@@ -59,58 +78,87 @@ while true; do
 
     case $choice in
     1)
-        echo "Version de l'OS : "
-        sshpass -p $MDP ssh $USER@$CLIENT lsb_release -a
+        get_connection_info
+        log "Début de consultation de la version de l'OS"
+        ssh_exe "echo \"Version de l'OS :\" ; lsb_release -a"
+        log "Fin de consultation de la version de l'OS"
         ask_continue
         ;;
     2)
-        echo "Nombre de disque: "
-        sshpass -p $MDP ssh $USER@$CLIENT df -h
+        get_connection_info
+        log "Début de consultation du nom de disque présent sur la machine"
+        ssh_exe "echo \"Nombre de disque:\" ; df -h"
+        log "Fin de consultation du nombre de disque présent sur la machine"
         ask_continue
         ;;
     3)
-        echo "Partition (nombre, nom, FS, taille) par disque : "
-        sshpass -p $MDP ssh $USER@$CLIENT lsblk -o NAME,SIZE,FSTYPE,MOUNTPOINT
+        get_connection_info
+        log "Début de consultation du partionnement par dique"
+        ssh_exe "echo \"Partition (nombre, nom, FS, taille) par disque : \" ; lsblk -o NAME,SIZE,FSTYPE,MOUNTPOINT"
+        log "Fin de consultation du partionnement par dique"
         ask_continue
         ;;
     4)
-        echo "Liste des applications/paquets installées "
-        sshpass -p $MDP ssh $USER@$CLIENT dpkg --get-selections 
+        get_connection_info
+        log "Début de consultation des applications et paquets installés sur la machine"
+        ssh_exe "echo \"Liste des applications/paquets installées : \" ; dpkg -l"
+        log "Fin de consultation des applications et paquets installés sur la machine"
         ask_continue
         ;;
     5)
-        echo "Liste des services en cours d'execution"
-        sshpass -p $MDP ssh $USER@$CLIENT systemctl list-units --type=service --state=running
+        get_connection_info
+        log "Début de consultation des services en cours d'execution"
+
+        ssh_exe "echo \"Liste des services en cours d'execution : \" ; systemctl list-units --type=service --state=running"
+        log "Fin de consultation des services en cours d'execution"
         ask_continue
         ;;
     6)
-        echo "Liste des utilisateurs locaux"
-        sshpass -p $MDP ssh $USER@$CLIENT cut -d: -f1 /etc/passwd
+        get_connection_info
+        log "Début de consultation des utilisateurs locaux"
+
+        ssh_exe "echo \"Liste des utilisateurs locaux : \" ; cut -d: -f1 /etc/passwd"
+        log "Fin de consultation des utilisateurs locaux"
         ask_continue
         ;;
     7)
-        echo "CPU Information :"
-        sshpass -p $MDP ssh $USER@$CLIENT lscpu
+        get_connection_info
+        log "Début de consultation des informations relatives au CPU"
+
+        ssh_exe "echo \"CPU Information : \" ; lscpu"
+        log "Fin de consultation des informations relatives au CPU"
         ask_continue
         ;;
     8)
-        echo "Mémoire RAM totale"
-        sshpass -p $MDP ssh $USER@$CLIENT free -h -t
+        get_connection_info
+        log "Début de consultation des informations relatives à la RAM"
+
+        ssh_exe "echo \"Mémoire RAM totale : \" ; free -h -t"
+        log "Fin de consultation des informations relatives à la RAM"
         ask_continue
         ;;
     9)
-        echo "Utilisation de la RAM"
-        sshpass -p $MDP ssh $USER@$CLIENT free -h
+        get_connection_info
+        log "Début de consultation des informations relatives à l'utilisation de la RAM"
+
+        ssh_exe "echo \"Utilisation de la RAM : \" ; free -h | grep 'Mem' | awk {'print $3'}"
+        log "Fin de consultation des informations relatives à l'utilisation de la RAM"
         ask_continue
         ;;
     10)
-        echo "Utilisation du disque"
-        sshpass -p $MDP ssh $USER@$CLIENT df -h
+        get_connection_info
+        log "Début de consultation des informations relatives à l'utilisation du disque"
+
+        ssh_exe "echo \"Utilisation du disque : \" ; df -h"
+        log "Fin de consultation des informations relatives à l'utilisation du disque"
         ask_continue
         ;;
     11)
-        echo "Utilisation du processeur :"
-        sshpass -p $MDP ssh $USER@$CLIENT top -b -n1 | grep "Cpu(s)"
+        get_connection_info
+        log "Début de consultation des informations relatives à l'utilisation du processeur"
+
+        ssh_exe "echo \"Utilisation du processeur : \" ; top -b -n1 | grep 'Cpu(s)'"
+        log "Fin de consultation des informations relatives à l'utilisation du processeur"
         ask_continue
 
         ;;
