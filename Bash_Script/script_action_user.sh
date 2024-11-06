@@ -211,19 +211,34 @@ done
 ask_continue
 }
 
+# Définition des couleurs
+RED='\033[0;31m'
+BLUE='\033[0;34m'
+YELLOW='\033[0;33m'
+NC='\033[0m' # Aucune couleur
+
 while true
 do
     clear
-	echo "==========Menu Action de l'utilisateur=========="
-	echo "----------Utilisateur----------"
+	echo -e "${RED}------- Gestion des Utilisateurs -------${NC}"
+	
+    echo ""
+    
+    echo -e "${BLUE}----- Utilisateurs -----${NC}"
     echo "1) Création de compte utilisateur local"
 	echo "2) Changement de mot de passe"
 	echo "3) Suppression de compte utilisateur local"
 	echo "4) Désactivation de compte utilisateur local"
-	echo "----------Groupe----------"
+	
+    echo""
+
+    echo -e "${BLUE}----- Groupe -----${NC}"
     echo "5) Ajout à un groupe local"
 	echo "6) Sortie d’un groupe local"
-	echo "----------Autre----------"
+	
+    echo""
+    
+    echo -e "${BLUE}----- Autre -----${NC}"
     echo "7) Revenir au Menu principal"
 	echo "8) Quitter"
 
