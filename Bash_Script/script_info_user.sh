@@ -1,9 +1,26 @@
 #!bin/bash
 
+# Définition des couleurs
+RED='\033[0;31m'
+BLUE='\033[0;34m'
+GREEN='\033[0;32m'
+NC='\033[0m' # Aucune couleur
+
+# Chemin vers le fichier log
+LOG_FILE="\\wsl.localhost\Ubuntu\home\raya\user.log" 
+
+# Fonction de journalisation
+function log {
+    echo "$(date "+%Y-%m-%d %H:%M:%S") - $1" >> $LOG_FILE
+}
+
 # Demande les informations de connexion
 function get_connection_info {
-    read -p "Entrez le nom d'utilisateur avec lequel vous souhaitez vous connecter :" USERDISTANT
-    read -p "Entrez l'adresse IP ou le nom d'hôte de la machine distante : " CLIENT
+    echo -e "${GREEN}Entrez le nom d'utilisateur avec lequel vous souhaitez vous connecter :${NC}"
+    read USERDISTANT
+    echo -e "${GREEN}Entrez l'adresse IP ou le nom d'hôte de la machine distante :${NC}"
+    read CLIENT
+    log "Informations de connexion via SSH - Utilisateur : $USERDISTANT, Client : $CLIENT"
 }
 
 # Commande pour lancer le ssh en fonction des variables 
@@ -12,18 +29,13 @@ function ssh_exe
     ssh "$USERDISTANT@$CLIENT" "$1"
     }
 
-# Fonction de journalisation
-function log {
-    echo "$(date "+%Y-%m-%d %H:%M:%S") - $1" >> $LOG_FILE
-}
 
-# Chemin vers le fichier log
-LOG_FILE="\\wsl.localhost\Ubuntu\home\raya\user.log" 
 
 # Fonction pour demander les informations sur quel utilisateur vous souhaitez des infos
 function user_name ()
 {
-    read -p "Entrez le nom d'utilisateur : " USERNAME
+    echo -e "${GREEN}Entrez le nom d'utilisateur sur lequel vous souhaitez consulter :${NC}" 
+    read USERNAME
     }
 
 # Demande si vous souhaitez poursuivre l'execution du script ou quitter
