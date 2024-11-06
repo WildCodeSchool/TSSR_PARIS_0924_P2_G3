@@ -3,6 +3,7 @@
 function get_connection_info {
     read -p "Entrez le nom d'utilisateur avec lequel vous souhaitez vous connecter :" USERDISTANT
     read -p "Entrez l'adresse IP ou le nom d'hôte de la machine distante : " CLIENT
+    log "information de connexion - Utilisateur : $USERDISTANT, Client : $CLIENT"
 }
 
 # Commande pour lancer le ssh en fonction des variables 
@@ -52,7 +53,7 @@ function user_creation
     get_connection_info
     user_name 
     echo "Création du compte utilisateur local"
-    log "Début de la création de l'utilisateur $USERNAME sur $CLIENT"
+    log "Début de la création de l'utilisateur $USERNAME "
     ssh_exe <<EOF
 #Vérification de l'existence du compte
 if grep -w $USERNAME /etc/passwd > /dev/null
@@ -79,7 +80,7 @@ else
     fi
 fi
 EOF
-    log " Fin de création du compte utilisateur $USERNAME sur $CLIENT"
+    log " Fin de création du compte utilisateur $USERNAME "
     ask_continue
 }
 #Fonction qui permet de changer un mot de passe
@@ -92,7 +93,7 @@ while
         clear
         get_connection_info
         user_name 
-        log "Début du changement du mot de passe de l'utilisateur $USERNAME sur $CLIENT"
+        log "Début du changement du mot de passe de l'utilisateur $USERNAME "
         ssh_exe <<EOF
         ! grep -w "$USERNAME" /etc/passwd > /dev/null
 #Le compte n'existe pas
@@ -102,7 +103,7 @@ do
 done
     sudo passwd $USERNAME
 EOF
-log "Fin du changement de mot de passe de l'utilisateur $USERNAME sur $CLIENT"
+log "Fin du changement de mot de passe de l'utilisateur $USERNAME "
 ask_continue
 
 }
@@ -113,7 +114,7 @@ function user_deletion
     get_connection_info
     echo "Suppression de compte utilisateur local"
     user_name
-    log "Début de suppression de compte utilisateur $USERNAME sur $CLIENT"
+    log "Début de suppression de compte utilisateur $USERNAME "
     ssh_exe <<EOF
 #Tester l'existence du compte dans le système
     if grep -w $USERNAME /etc/passwd > /dev/null
@@ -139,7 +140,7 @@ else
    echo "Le compte utilisateur $USERNAME n'exite pas "
 fi
 EOF
-    log "Fin de suppression de compte utilisateur $USERNAME sur $CLIENT"
+    log "Fin de suppression de compte utilisateur $USERNAME "
     ask_continue
 }
 # Définition des fonctions qui vont agir sur l'utilisateur
@@ -150,7 +151,7 @@ function user_disable
     get_connection_info
     echo "Désactivation de compte utilisateur local"
     user_name
-    log "Début de désactivation de compte utilisateur $USERNAME sur $CLIENT"
+    log "Début de désactivation de compte utilisateur $USERNAME "
     ssh_exe <<EOF
 #Tester l'existance du compte dans le système
     if grep -w $USERNAME /etc/passwd > /dev/null
@@ -177,7 +178,7 @@ else
    echo "Le compte utilisateur $USERNAME n'existe pas "
 fi
 EOF
-    log "Fin de désactivation de compte utilisateur $USERNAME sur $CLIENT"
+    log "Fin de désactivation de compte utilisateur $USERNAME "
     ask_continue
 }
 
@@ -193,7 +194,7 @@ while
     clear
     get_connection_info
     user_name
-    log "Début de l'ajout de compte utilisateur $USERNAME dans le groupe $GROUPNAME sur $CLIENT"
+    log "Début de l'ajout de compte utilisateur $USERNAME dans le groupe $GROUPNAME "
     ssh_exe <<EOF
     ! grep -w "$USERNAME" /etc/passwd > /dev/null
 #Le compte n'existe pas
@@ -217,7 +218,7 @@ done
             echo "Échec de l'ajout du compte utilisateur $USERNAME au groupe $GROUPNAME."
         fi
 EOF
-    log "Fin de l'ajout de compte utilisateur $USERNAME dans le groupe $GROUPNAME sur $CLIENT"
+    log "Fin de l'ajout de compte utilisateur $USERNAME dans le groupe $GROUPNAME "
     ask_continue
 }
 
@@ -230,7 +231,7 @@ while
     clear
     get_connection_info
     user_name 
-    log "Début de retrait de compte utilisateur $USERNAME dans le groupe $GROUPNAME sur $CLIENT"
+    log "Début de retrait de compte utilisateur $USERNAME dans le groupe $GROUPNAME "
     ssh_exe <<EOF
     ! grep -w "$USERNAME" /etc/passwd > /dev/null
 #Le compte n'existe pas
@@ -254,7 +255,7 @@ done
             echo "Échec du retrait du compte utilisateur $USERNAME du groupe $GROUPNAME."
         fi
 EOF
-    log "Fin de retrait de compte utilisateur $USERNAME dans le groupe $GROUPNAME sur $CLIENT"
+    log "Fin de retrait de compte utilisateur $USERNAME dans le groupe $GROUPNAME "
     ask_continue
 }
 
