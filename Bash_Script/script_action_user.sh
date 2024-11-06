@@ -30,18 +30,18 @@ function user_creation
 {
     clear
     echo "Création du compte utilisateur local"
-    read -p "Entrez le nom du compte à créer : " newUser
+    read -p "Entrez le nom du compte utilisateur à créer : " newUser
 
 #Vérification de l'existence du compte
 if grep -w $newUser /etc/passwd > /dev/null
 then
     #Le compte $newUser existe déjà
     #Afficher message et renvoi au menu précédent
-    echo -e "Le compte utilisatueur $newUser existe déjà"
+    echo -e "Le compte utilisateur $newUser existe déjà"
 
 else
     #Le compte $newUser n'existe pas
-    #Afficher un message et créé le compte utilisteur
+    #Afficher un message et créé le compte utilisateur
    
     echo "Création de l'utilisateur $newUser"
     ssh -t $USER@$CLIENT sudo useradd $newUser > /dev/null 
@@ -51,9 +51,9 @@ else
     then
 
     #Le compte utilisateur a été créé   
-       echo "Compte utilisateur $newUser crée!"
+       echo "Compte utilisateur $newUser créé!"
     else
-       echo "Compte utilisateur $newUser non-crée!"
+       echo "Compte utilisateur $newUser non-créé!"
     fi
 fi
     ask_continue
@@ -61,7 +61,7 @@ fi
 #Fonction qui permet de changer un mot de passe
 function password_change 
 {
-#Sur quel nom d'utilisateur on veut changer le mot de passe $USERNAME
+#Sur quel compte utilisateur on veut changer le mot de passe $USERNAME
 #Vérification de l'existence du compte
 
 while 
@@ -81,13 +81,13 @@ function user_deletion
 {
     clear
     echo "Suppression de compte utilisateur local"
-    read -p "Entrez un nom du compte à supprimer : " supUser
-#Tester l'existance du compte dans le système
+    read -p "Entrez un nom du compte utilisateur à supprimer : " supUser
+#Tester l'existence du compte dans le système
     if grep -w $supUser /etc/passwd > /dev/null
     then
 #Le compte existe
 #Validation de la suppression 
-        read -p "Etes vous sûre de vouloir supprimer le compte $supUser  ? (o/n) : " CONTINUE
+        read -p "Etes vous sûre de vouloir supprimer le compte utilisateur $supUser  ? (o/n) : " CONTINUE
         case $CONTINUE in
             [oO]) sudo userdel -r -f $supUser > /dev/null 2> /dev/null ;;  # Continue le script
             [nN]) exit ;;    # Quitte le script
@@ -96,14 +96,14 @@ function user_deletion
    if grep -w $supUser /etc/passwd > /dev/null
    then
        #Erreur le compte utilisateur non supprimé
-       echo "Attention le compte $supUser n'a pas pu être supprimé ! "
+       echo "Attention le compte utilisateur $supUser n'a pas pu être supprimé ! "
    else
        #Le compte utilisateur est supprimé
-       echo "Le compte $supUser est supprimé ! "
+       echo "Le compte utilisateur $supUser est supprimé ! "
    fi
 else
    #Le compte utilisateur n'existe pas
-   echo "Le compte $supUser n'exite pas "
+   echo "Le compte utilisateur $supUser n'exite pas "
 fi
 
 ask_continue
@@ -114,13 +114,13 @@ function user_disable
 {
     clear
     echo "Désactivation de compte utilisateur local"
-    read -p "Entrez le nom du compte à désactiver : " desUser
+    read -p "Entrez le nom du compte utilisateur à désactiver : " desUser
 #Tester l'existance du compte dans le système
     if grep -w $desUser /etc/passwd > /dev/null
     then
 #Le compte existe
 #Validation de la désactivation
-        read -p "Etes vous sûre de vouloir désactiver le compte $desUser  ? (o/n) : " CONTINUE
+        read -p "Etes vous sûre de vouloir désactiver le compte utilisateur $desUser  ? (o/n) : " CONTINUE
         case $CONTINUE in
             [oO]) sudo passwd -l $desUser > /dev/null 2> /dev/null ;;  # Continue le script
             [nN]) exit ;;    # Quitte le script
@@ -128,15 +128,15 @@ function user_disable
         esac
    if ssh -t $USER@$CLIENT sudo passwd -S $desUser | grep -q "L"
    then
-       #Le compte utilisateur est désactivée
-       echo "Le compte $desUser est désactivée ! " 
+       #Le compte utilisateur est désactivé
+       echo "Le compte utilisateur $desUser est désactivé ! " 
     else
-       #Erreur le compte utilisateur n'est pas désactivée
-       echo "Attention le compte $desUser n'a pas pu être désactivée ! "
+       #Erreur le compte utilisateur n'est pas désactivé
+       echo "Attention le compte utilisateur $desUser n'a pas pu être désactivé ! "
    fi
 else
    #Le compte utilisateur n'existe pas
-   echo "Le compte $desUser n'exite pas "
+   echo "Le compte utilisateur $desUser n'existe pas "
 fi
 ask_continue
 }
@@ -168,9 +168,9 @@ done
         if
            ssh -t $USER@$CLIENT sudo usermod -aG "$GROUPNAME" "$USERNAME"
         then
-            echo "L'utilisateur $USERNAME a été ajouté au groupe $GROUPNAME avec succès."
+            echo "Le compte utilisateur $USERNAME a été ajouté au groupe $GROUPNAME avec succès."
         else
-            echo "Échec de l'ajout de l'utilisateur $USERNAME au groupe $GROUPNAME."
+            echo "Échec de l'ajout du compte utilisateur $USERNAME au groupe $GROUPNAME."
         fi
 
 ask_continue
@@ -201,9 +201,9 @@ done
         if
             ssh -t $USER@$CLIENT sudo gpasswd -d "$USERNAME" "$GROUPNAME"
         then
-            echo "L'utilisateur $USERNAME a été retiré du groupe $GROUPNAME avec succès."
+            echo "Le compte utilisateur $USERNAME a été retiré du groupe $GROUPNAME avec succès."
         else
-            echo "Échec du retrait de l'utilisateur $USERNAME du groupe $GROUPNAME."
+            echo "Échec du retrait du compte utilisateur $USERNAME du groupe $GROUPNAME."
         fi
 
 
@@ -242,7 +242,7 @@ do
     echo "7) Revenir au Menu principal"
 	echo "8) Quitter"
 
-read -p "Choissisez une option :" choice
+    read -p "Choissisez une option :" choice
 
 case $choice in
         1) user_creation
@@ -254,8 +254,8 @@ case $choice in
         4) user_disable
                 ;;
         5) add_group
-		;;
-	6) delete_group
+		        ;;
+	    6) delete_group
                 ;;
         7) break
                 ;;
