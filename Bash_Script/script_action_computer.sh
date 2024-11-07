@@ -9,7 +9,7 @@ GREEN='\033[0;32m'
 NC='\033[0m' # Aucune couleur
 
 # Chemin vers le fichier log
-LOG_FILE="\\wsl.localhost\Ubuntu\home\raya\user.log"
+LOG_FILE="/home/wilder/Documents/log_event.log"
 
 # Fonction de journalisation
 function log {
