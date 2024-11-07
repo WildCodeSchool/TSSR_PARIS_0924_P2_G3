@@ -6,7 +6,7 @@ GREEN='\033[0;32m'
 NC='\033[0m' # Aucune couleur
 
 # Chemin vers le fichier log
-LOG_FILE="/home/wilder/Documents/log_event.log"
+LOG_FILE="\\wsl.localhost\Ubuntu\home\raya\TSSR_PARIS_0924_P2_G3"
 
 # Fonction de journalisation
 function log {
@@ -21,18 +21,18 @@ function get_connection_info {
     read CLIENT
     echo -e "${GREEN}Entrez le nom d'utilisateur :${NC}" 
     read USERNAME
-    log "Informations de connexion via SSH - Utilisateur : $USERDISTANT, Client : $CLIENT"
+  log "Informations de connexion via SSH - Utilisateur : $USERDISTANT, Client : $CLIENT"
+}
+
+# Commande pour lancer le ssh en fonction des variables
+function ssh_exe {
+    ssh -t "$USERDISTANT@$CLIENT" "$1"
 }
 
 # Demande de renseigner le nom du goupe sur lequel vous voullez agir
 function group_name()
 {
-    read -p "Entrez le nom du groupe où ajouter l'utilisateur : " GROUPNAME
-}
-
-# Commande pour lancer le ssh en fonction des variables
-function ssh_exe {
-    ssh "$USERDISTANT@$CLIENT" "$1"
+    read -p "Entrez le nom du groupe où vous souhaitez ajouter/supprimer l'utilisateur : " GROUPNAME
 }
 
 
@@ -61,7 +61,7 @@ function user_creation
 #Vérification de l'existence du compte
 if grep -w $USERNAME /etc/passwd > /dev/null
 then
-    #Le compte $USERNAMEexiste déjà
+    #Le compte $USERNAME existe déjà
     #Afficher message et renvoi au menu précédent
     echo -e "Le compte utilisateur $USERNAME existe déjà"
 
@@ -83,20 +83,17 @@ else
     fi
 fi
 EOF
-    log " Fin de création du compte utilisateur $USERNAME "
+  log " Fin de création du compte utilisateur $USERNAME "
     ask_continue
 }
 #Fonction qui permet de changer un mot de passe
 function password_change 
-{
-#Sur quel compte utilisateur on veut changer le mot de passe $USERNAME
-#Vérification de l'existence du compte
-
-while 
+{ 
         clear
         get_connection_info
-        log "Début du changement du mot de passe de l'utilisateur $USERNAME "
+      log "Début du changement du mot de passe de l'utilisateur $USERNAME "
         ssh_exe <<EOF
+while  #Vérification de l'existence du compte
         ! grep -w "$USERNAME" /etc/passwd > /dev/null
 #Le compte n'existe pas
 do
@@ -105,17 +102,17 @@ do
 done
     passwd $USERNAME
 EOF
-log "Fin du changement de mot de passe de l'utilisateur $USERNAME "
+    log "Fin du changement de mot de passe de l'utilisateur $USERNAME "
 ask_continue
-
 }
+
 #Fonction qui permet de supprimer un compte utilisateur
 function user_deletion 
 {
     clear
     get_connection_info
     echo "Suppression de compte utilisateur local"
-    log "Début de suppression de compte utilisateur $USERNAME "
+  log "Début de suppression de compte utilisateur $USERNAME "
     ssh_exe <<EOF
 #Tester l'existence du compte dans le système
     if grep -w $USERNAME /etc/passwd > /dev/null
@@ -141,7 +138,7 @@ else
    echo "Le compte utilisateur $USERNAME n'exite pas "
 fi
 EOF
-    log "Fin de suppression de compte utilisateur $USERNAME "
+  log "Fin de suppression de compte utilisateur $USERNAME "
     ask_continue
 }
 
@@ -152,34 +149,22 @@ function user_disable
     clear
     get_connection_info
     echo "Désactivation de compte utilisateur local"
-    log "Début de désactivation de compte utilisateur $USERNAME "
+  # "Début de désactivation de compte utilisateur $USERNAME "
     ssh_exe <<EOF
 #Tester l'existance du compte dans le système
     if grep -w $USERNAME /etc/passwd > /dev/null
     then
-#Le compte existe
-#Validation de la désactivation
-        read -p "Etes vous sûre de vouloir désactiver le compte utilisateur $USERNAME ? (o/n) : " CONTINUE
-        case $CONTINUE in
-            [oO]) passwd -l $USERNAME > /dev/null 2> /dev/null ;;  # Continue le script
-            [nN]) exit ;;    # Quitte le script
-            *) echo "Veuillez entrer 'o' pour oui ou 'n' pour non." ;;
-        esac
-   if 
-        passwd -S $USERNAMEr | grep -q "L"
-   then
-       #Le compte utilisateur est désactivé
-       echo "Le compte utilisateur $USERNAME est désactivé ! " 
-    else
-       #Erreur le compte utilisateur n'est pas désactivé
-       echo "Attention le compte utilisateur $USERNAME n'a pas pu être désactivé ! "
-   fi
+ 
+        usermod -L $USERNAME | grep -q "L"  #Le compte existe
+        echo "Le compte utilisateur $USERNAME est désactivé ! " #Le compte utilisateur est désactivé
+        grep $USERNAME /etc/shadow
+       
 else
    #Le compte utilisateur n'existe pas
    echo "Le compte utilisateur $USERNAME n'existe pas "
 fi
 EOF
-    log "Fin de désactivation de compte utilisateur $USERNAME "
+  log "Fin de désactivation de compte utilisateur $USERNAME "
     ask_continue
 }
 
@@ -190,13 +175,12 @@ function add_group
 {
 #Quel nom d'utilisateur $USERNAME on veut mettre dans un group $GROUPNAME
 #Vérification de l'existence du compte
-
-while 
     clear
     get_connection_info
-    groupe_name
-    log "Début de l'ajout de compte utilisateur $USERNAME dans le groupe $GROUPNAME "
+    group_name
+  log "Début de l'ajout de compte utilisateur $USERNAME dans le groupe $GROUPNAME "
     ssh_exe <<EOF
+while 
     ! grep -w "$USERNAME" /etc/passwd > /dev/null
 #Le compte n'existe pas
 do
@@ -215,11 +199,12 @@ done
             usermod -aG "$GROUPNAME" "$USERNAME"
         then
             echo "Le compte utilisateur $USERNAME a été ajouté au groupe $GROUPNAME avec succès."
+            groups $USERNAME
         else
             echo "Échec de l'ajout du compte utilisateur $USERNAME au groupe $GROUPNAME."
         fi
 EOF
-    log "Fin de l'ajout de compte utilisateur $USERNAME dans le groupe $GROUPNAME "
+  log "Fin de l'ajout de compte utilisateur $USERNAME dans le groupe $GROUPNAME "
     ask_continue
 }
 
@@ -228,12 +213,13 @@ function delete_group
 #Quel nom d'utilisateur $USERNAME on veut retirer du group $GROUPNAME
 #Vérification de l'existence du compte
 
-while 
+
     clear
     get_connection_info
     group_name
-    log "Début de retrait de compte utilisateur $USERNAME dans le groupe $GROUPNAME "
+  log "Début de retrait de compte utilisateur $USERNAME dans le groupe $GROUPNAME "
     ssh_exe <<EOF
+ while 
     ! grep -w "$USERNAME" /etc/passwd > /dev/null
 #Le compte n'existe pas
 do
@@ -252,14 +238,16 @@ done
             gpasswd -d "$USERNAME" "$GROUPNAME"
         then
             echo "Le compte utilisateur $USERNAME a été retiré du groupe $GROUPNAME avec succès."
+            groups $USERNAME
         else
             echo "Échec du retrait du compte utilisateur $USERNAME du groupe $GROUPNAME."
         fi
 EOF
-    log "Fin de retrait de compte utilisateur $USERNAME dans le groupe $GROUPNAME "
+  log "Fin de retrait de compte utilisateur $USERNAME dans le groupe $GROUPNAME "
     ask_continue
 }
 
+# Menu 
 while true
 do
     clear

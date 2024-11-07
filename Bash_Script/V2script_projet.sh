@@ -2,19 +2,16 @@
 
 # Définition des couleurs
 RED='\033[0;31m'
-BLUE='\033[0;34m'
-GREEN='\033[0;32m'
 NC='\033[0m' # Aucune couleur
 
 # Fonction de journalisation
-log_message() {
-  local message="$1"
-  LOG_FILE="/home/wilder/Documents/log_event.log"
-  echo "$(date "+%Y-%m-%d %H:%M:%S") - $message" >> "$log_file"
-}
+#log_message() {
+  #local message="$1"
+  #log_file="/home/wilder/Documents/log_event.log"
+  #echo "$(date "+%Y-%m-%d %H:%M:%S") - $message" >> "$log_file"}
 
 # Appel de la fonction de log pour indiquer que le script est lancé
-log_message "Le script a été lancé par l'utilisateur $USER"
+#log_message "Le script a été lancé par l'utilisateur $USER"
 
 
 # Fonction pour gérer le Menu utilisateur
@@ -23,8 +20,8 @@ function Menu_gestion_user ()
 while true
 do 
     clear
-    echo -e "${RED ----- Menu de l'utilisateur ----- ${NC}
-    ech ""
+    echo -e "${RED} ----- Menu de l'utilisateur ----- ${NC}"
+    echo ""
     echo "1) Action sur l'utilisateur"
     echo "2) Information sur l'utilisateur"
     echo "3) Revenir au menu principal" 
@@ -52,7 +49,7 @@ function Menu_gestion_computer ()
 while true
 do 
     clear
-    echo -e "${RED----- Menu de l'ordinateur -----${NC}
+    echo -e "${RED}----- Menu de l'ordinateur -----${NC}"
     echo ""
     echo "1) Action sur l'ordinateur"
     echo "2) Information sur l'ordinateur"
@@ -81,7 +78,7 @@ function Journal ()
     while true
     do
         clear
-        echo -e "${RED------- Menu Journal ---------${NC}
+        echo -e "${RED}------- Menu Journal ---------${NC}"
         echo ""
         echo "1) Événements sur l'utilisateur"
         echo "2) Événements sur l'ordinateur"
