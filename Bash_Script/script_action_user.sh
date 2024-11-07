@@ -1,34 +1,38 @@
 #!/bin/bash
-# Demande les informations de connexion
-function get_connection_info {
-    read -p "Entrez le nom d'utilisateur avec lequel vous souhaitez vous connecter :" USERDISTANT
-    read -p "Entrez l'adresse IP ou le nom d'hôte de la machine distante : " CLIENT
-    log "information de connexion - Utilisateur : $USERDISTANT, Client : $CLIENT"
-}
-
-# Commande pour lancer le ssh en fonction des variables 
-function ssh_exe 
-{
-    ssh "$USERDISTANT@$CLIENT" "$1"
-    }
-
-# Fonction de journalisation
-function log {
-    echo "$(date "+%Y-%m-%d %H:%M:%S") - $1" >> $LOG_FILE
-}
+# Définition des couleurs
+RED='\033[0;31m'
+BLUE='\033[0;34m'
+GREEN='\033[0;32m'
+NC='\033[0m' # Aucune couleur
 
 # Chemin vers le fichier log
 LOG_FILE="\\wsl.localhost\Ubuntu\home\raya\user.log"
 
-# Demande de renseigner le nom d'utilisateur sur lequel vous voullez agir
-function user_name ()
-{
-    read -p "Entrez le nom d'utilisateur : " USERNAME
+# Fonction de journalisation
+function log {
+    echo "$(date "+%Y-%m-%d %H:%M:%S") - $1" >>$LOG_FILE
 }
+
+# Demande les informations de connexion
+function get_connection_info {
+    echo -e "${GREEN}Entrez le nom d'utilisateur avec lequel vous souhaitez vous connecter :${NC}"
+    read USERDISTANT
+    echo -e "${GREEN}Entrez l'adresse IP ou le nom d'hôte de la machine distante :${NC}"
+    read CLIENT
+    echo -e "${GREEN}Entrez le nom d'utilisateur :${NC}" 
+    read USERNAME
+    log "Informations de connexion via SSH - Utilisateur : $USERDISTANT, Client : $CLIENT"
+}
+
 # Demande de renseigner le nom du goupe sur lequel vous voullez agir
 function group_name()
 {
     read -p "Entrez le nom du groupe où ajouter l'utilisateur : " GROUPNAME
+}
+
+# Commande pour lancer le ssh en fonction des variables
+function ssh_exe {
+    ssh "$USERDISTANT@$CLIENT" "$1"
 }
 
 
@@ -51,7 +55,6 @@ function user_creation
 {
     clear
     get_connection_info
-    user_name 
     echo "Création du compte utilisateur local"
     log "Début de la création de l'utilisateur $USERNAME "
     ssh_exe <<EOF
@@ -67,7 +70,7 @@ else
     #Afficher un message et créé le compte utilisateur
    
     echo "Création de l'utilisateur $USERNAME"
-    ssh -t $USER@$CLIENT sudo useradd $USERNAME > /dev/null 
+    useradd $USERNAME > /dev/null 
  
     #Vérification de la création du compte utilisateur
     if cat /etc/passwd | grep $USERNAME > /dev/null
@@ -92,7 +95,6 @@ function password_change
 while 
         clear
         get_connection_info
-        user_name 
         log "Début du changement du mot de passe de l'utilisateur $USERNAME "
         ssh_exe <<EOF
         ! grep -w "$USERNAME" /etc/passwd > /dev/null
@@ -101,7 +103,7 @@ do
     echo "Le compte utilisateur $USERNAME n'existe pas."
 #Le compte existe
 done
-    sudo passwd $USERNAME
+    passwd $USERNAME
 EOF
 log "Fin du changement de mot de passe de l'utilisateur $USERNAME "
 ask_continue
@@ -113,7 +115,6 @@ function user_deletion
     clear
     get_connection_info
     echo "Suppression de compte utilisateur local"
-    user_name
     log "Début de suppression de compte utilisateur $USERNAME "
     ssh_exe <<EOF
 #Tester l'existence du compte dans le système
@@ -123,7 +124,7 @@ function user_deletion
 #Validation de la suppression 
         read -p "Etes vous sûre de vouloir supprimer le compte utilisateur $USERNAME  ? (o/n) : " CONTINUE
         case $CONTINUE in
-            [oO]) sudo userdel -r -f $USERNAME > /dev/null 2> /dev/null ;;  # Continue le script
+            [oO]) userdel -r -f $USERNAME > /dev/null 2> /dev/null ;;  # Continue le script
             [nN]) exit ;;    # Quitte le script
             *) echo "Veuillez entrer 'o' pour oui ou 'n' pour non." ;;
         esac
@@ -143,6 +144,7 @@ EOF
     log "Fin de suppression de compte utilisateur $USERNAME "
     ask_continue
 }
+
 # Définition des fonctions qui vont agir sur l'utilisateur
 # Fonction de désactivation du compte utlisateur
 function user_disable 
@@ -150,7 +152,6 @@ function user_disable
     clear
     get_connection_info
     echo "Désactivation de compte utilisateur local"
-    user_name
     log "Début de désactivation de compte utilisateur $USERNAME "
     ssh_exe <<EOF
 #Tester l'existance du compte dans le système
@@ -160,12 +161,12 @@ function user_disable
 #Validation de la désactivation
         read -p "Etes vous sûre de vouloir désactiver le compte utilisateur $USERNAME ? (o/n) : " CONTINUE
         case $CONTINUE in
-            [oO]) sudo passwd -l $USERNAME > /dev/null 2> /dev/null ;;  # Continue le script
+            [oO]) passwd -l $USERNAME > /dev/null 2> /dev/null ;;  # Continue le script
             [nN]) exit ;;    # Quitte le script
             *) echo "Veuillez entrer 'o' pour oui ou 'n' pour non." ;;
         esac
    if 
-        sudo passwd -S $USERNAMEr | grep -q "L"
+        passwd -S $USERNAMEr | grep -q "L"
    then
        #Le compte utilisateur est désactivé
        echo "Le compte utilisateur $USERNAME est désactivé ! " 
@@ -193,7 +194,7 @@ function add_group
 while 
     clear
     get_connection_info
-    user_name
+    groupe_name
     log "Début de l'ajout de compte utilisateur $USERNAME dans le groupe $GROUPNAME "
     ssh_exe <<EOF
     ! grep -w "$USERNAME" /etc/passwd > /dev/null
@@ -211,7 +212,7 @@ done
 #Le groupe existe
     done
         if
-            sudo usermod -aG "$GROUPNAME" "$USERNAME"
+            usermod -aG "$GROUPNAME" "$USERNAME"
         then
             echo "Le compte utilisateur $USERNAME a été ajouté au groupe $GROUPNAME avec succès."
         else
@@ -230,7 +231,7 @@ function delete_group
 while 
     clear
     get_connection_info
-    user_name 
+    group_name
     log "Début de retrait de compte utilisateur $USERNAME dans le groupe $GROUPNAME "
     ssh_exe <<EOF
     ! grep -w "$USERNAME" /etc/passwd > /dev/null
@@ -248,7 +249,7 @@ done
 #Le groupe existe
     done
         if
-            sudo gpasswd -d "$USERNAME" "$GROUPNAME"
+            gpasswd -d "$USERNAME" "$GROUPNAME"
         then
             echo "Le compte utilisateur $USERNAME a été retiré du groupe $GROUPNAME avec succès."
         else
@@ -258,12 +259,6 @@ EOF
     log "Fin de retrait de compte utilisateur $USERNAME dans le groupe $GROUPNAME "
     ask_continue
 }
-
-# Définition des couleurs
-RED='\033[0;31m'
-BLUE='\033[0;34m'
-YELLOW='\033[0;33m'
-NC='\033[0m' # Aucune couleur
 
 while true
 do
