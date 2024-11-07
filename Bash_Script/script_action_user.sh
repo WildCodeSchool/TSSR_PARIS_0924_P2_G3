@@ -263,11 +263,11 @@ EOF
 while true
 do
     clear
-	echo -e "${RED}------- Gestion des Utilisateurs -------${NC}"
+	echo -e "${RED}------- Action Disponible -------${NC}"
 	
     echo ""
     
-    echo -e "${BLUE}----- Utilisateurs -----${NC}"
+    echo -e "${BLUE}----- Gestion des Utilisateurs -----${NC}"
     echo "1) Création de compte utilisateur local"
 	echo "2) Changement de mot de passe"
 	echo "3) Suppression de compte utilisateur local"
@@ -275,7 +275,7 @@ do
 	
     echo""
 
-    echo -e "${BLUE}----- Groupe -----${NC}"
+    echo -e "${BLUE}----- Gestion des Groupe -----${NC}"
     echo "5) Ajout à un groupe local"
 	echo "6) Sortie d’un groupe local"
 	
