@@ -1,10 +1,21 @@
 #!/bin/bash
 
-# Demander la machine d'intervention
-clear
-read -p "Entrez l'adresse IP ou le nom de la machine distante : " Client  # variable $Client représente la location de l'intervention
-read -p "Avec quel utilisateur souhaitez-vous vous connecter ? :" User
-ssh $user@$client
+# Définition des couleurs
+RED='\033[0;31m'
+BLUE='\033[0;34m'
+GREEN='\033[0;32m'
+NC='\033[0m' # Aucune couleur
+
+# Fonction de journalisation
+log_message() {
+  local message="$1"
+  local log_file="/var/log/bash_projet.log"
+  echo "$(date "+%Y-%m-%d %H:%M:%S") - $message" >> "$log_file"
+}
+
+# Appel de la fonction de log pour indiquer que le script est lancé
+log_message "Le script a été lancé par l'utilisateur $USER"
+
 
 # Fonction pour gérer le Menu utilisateur
 function Menu_gestion_user ()
