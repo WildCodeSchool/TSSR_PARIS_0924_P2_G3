@@ -9,7 +9,7 @@ NC='\033[0m' # Aucune couleur
 # Fonction de journalisation
 log_message() {
   local message="$1"
-  local log_file="/var/log/bash_projet.log"
+  LOG_FILE="/home/wilder/Documents/log_event.log"
   echo "$(date "+%Y-%m-%d %H:%M:%S") - $message" >> "$log_file"
 }
 
@@ -23,7 +23,8 @@ function Menu_gestion_user ()
 while true
 do 
     clear
-    echo "--- Menu de l'utilisateur ---"
+    echo -e "${RED ----- Menu de l'utilisateur ----- ${NC}
+    ech ""
     echo "1) Action sur l'utilisateur"
     echo "2) Information sur l'utilisateur"
     echo "3) Revenir au menu principal" 
@@ -51,7 +52,8 @@ function Menu_gestion_computer ()
 while true
 do 
     clear
-    echo "--- Menu de l'ordinateur ---"
+    echo -e "${RED----- Menu de l'ordinateur -----${NC}
+    echo ""
     echo "1) Action sur l'ordinateur"
     echo "2) Information sur l'ordinateur"
     echo "3) Revenir au menu principal"
@@ -79,7 +81,8 @@ function Journal ()
     while true
     do
         clear
-        echo "------- Menu Journal ---------"
+        echo -e "${RED------- Menu Journal ---------${NC}
+        echo ""
         echo "1) Événements sur l'utilisateur"
         echo "2) Événements sur l'ordinateur"
 
@@ -99,9 +102,10 @@ function Journal ()
 while true
 do 
     clear
-    echo "--- Menu Principal ---"
+    echo -e "${RED}--- Menu Principal ---${NC}"
+    echo ""
     echo "1) Gestion de l'utilisateur"
-    echo "2) Gestion de la machine"
+    echo "2) Gestion des ordinateurs clients"
     echo "3) Consultation des journaux"
     echo "4) Sortir"
 
