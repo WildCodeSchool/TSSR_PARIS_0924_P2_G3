@@ -19,10 +19,22 @@ Créer le menu principale
 Crée les scripts
 Tester en local 
 Ajouter la fonction log et ssh sur chaque scripts 
+Test à distance
 
 ## Choix Technique
 
+connexion via ssh 
+connection via PowerShell Remoting
+1 session de connextion par action ==> sécurité / fléxibilité
+division des scripts par menu
+appel via source ==> vigilance ++ que tout les scripts soit dans le meme dossier
+
+
+
 ## Difficultés rencontrées et Solutions trouvées
+
+pseudo terminal ==> utilisation root
+message de bienvenue ==> desactiver le message d'acceuil : sudo chmod -x /etc/update-motd.d/*
 
 ## Conclusion
 

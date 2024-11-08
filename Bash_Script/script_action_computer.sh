@@ -9,7 +9,7 @@ GREEN='\033[0;32m'
 NC='\033[0m' # Aucune couleur
 
 # Chemin vers le fichier log
-LOG_FILE="/home/wilder/Documents/log_event.log"
+LOG_FILE="\\wsl.localhost\Ubuntu\home\raya\TSSR_PARIS_0924_P2_G3"
 
 # Fonction de journalisation
 function log {
@@ -197,7 +197,7 @@ EOF
 function firewall_desactivation() {
     get_connection_info
     log "Début de désactivation du pare-feu"
-    ssh_exe ufw disable && ufw status
+    ssh_exe "ufw disable && ufw status"
     echo "Le pare-feu a été désactivé."
     log "Fin de désactivation du pare-feu"
     ask_continue
