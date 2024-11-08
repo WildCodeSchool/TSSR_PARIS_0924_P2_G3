@@ -1,6 +1,6 @@
 #!bin/bash
 
-#Menu des Action possible sur l'ordinateur
+# Menu des Action possible sur l'ordinateur, ce script sera rappelé en source depuis le menu principal 
 
 # Définition des couleurs
 RED='\033[0;31m'
@@ -282,6 +282,9 @@ function remote_execution() {
     ask_continue
 
 }
+
+###############################################################
+#Menu Princpial du script
 
 while true; do
     echo -e "${RED} ------- Action Disponible -------${NC}"
