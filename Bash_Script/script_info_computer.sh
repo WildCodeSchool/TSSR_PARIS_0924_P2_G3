@@ -7,7 +7,7 @@ GREEN='\033[0;32m'
 NC='\033[0m' # Aucune couleur
 
 # Chemin vers le fichier log
-LOG_FILE="/home/wilder/Documents/log_event.log"
+LOG_FILE="/home/wilder/Documents/log_evt.log"
 
 # Fonction de journalisation
 function log {
