@@ -9,7 +9,7 @@ GREEN='\033[0;32m'
 NC='\033[0m' # Aucune couleur
 
 # Chemin vers le fichier log
-LOG_FILE="\\wsl.localhost\Ubuntu\home\raya\TSSR_PARIS_0924_P2_G3"
+LOG_FILE="/home/wilder/Documents/log_evt.log"
 
 # Fonction de journalisation
 function log {
@@ -46,7 +46,7 @@ function ask_continue {
 function stop() {
     get_connection_info
     log "Début de l'arrêt de la machine distante $CLIENT"
-    ssh_exe "echo \"Arrêt de la machine $CLIENT \" ; sudo shutdown now"
+    ssh_exe "echo \"Arrêt de la machine $CLIENT \" ; shutdown now"
     log "Fin de l'arrêt de la machine distante $CLIENT"
     ask_continue
 
@@ -55,7 +55,7 @@ function stop() {
 function reboot() {
     get_connection_info
     log "Début du redémarrage de la machine distante $CLIENT"
-    ssh_exe "echo \"Redémarrage de la machine $CLIENT\" ; sudo reboot"
+    ssh_exe "echo \"Redémarrage de la machine $CLIENT\" ; reboot"
     log "Fin du redémarrage de la machine distante $CLIENT"
     ask_continue
 
@@ -64,7 +64,7 @@ function reboot() {
 function lock() {
     get_connection_info
     log "Début du verrouillage de la machine distante $CLIENT"
-    ssh_exe "echo \"Verrouillage de la machine\" , sudo vlock"
+    ssh_exe "echo \"Verrouillage de la machine\" ; vlock"
     log "Début du verrouillage de la machine distante $CLIENT"
     ask_continue
 
@@ -73,7 +73,7 @@ function lock() {
 function update_system() {
     get_connection_info
     log "Mise à jour du système sur $CLIENT - Début"
-    ssh_exe "echo \"Mise-à-jour du système\" ; sudo apt update && sudo apt upgrade -y"
+    ssh_exe "echo \"Mise-à-jour du système\" ; apt update && apt upgrade -y"
     log "Mise à jour du système sur $CLIENT - Terminé"
     ask_continue
 
@@ -87,9 +87,9 @@ function remote_control() {
     ssh_exe <<EOF
     echo "Connexion à $USERMACHINE@$MACHINEDISTANTE"
     if ssh -t $USER@$CLIENT; then
-        echo "Connexion réussie !" >> $LOG_FILE
+        echo "Connexion réussie !" 
     else
-        echo "Échec de la connexion." >> $LOGFILE
+        echo "Échec de la connexion."
     fi
 EOF
     log "Fin de la prise en main à distance"
@@ -109,8 +109,8 @@ function directory_creation() {
         exit 1
     else
     # Crée le dossier avec le chemin spécifié
-        sudo mkdir -p $WHERE/$DIRECTORY
-        echo "Le dossier $DIRECTORY a bien été créé." >> $LOG_FILE
+        mkdir -p $WHERE/$DIRECTORY
+        echo "Le dossier $DIRECTORY a bien été créé." 
         exit 0
     fi
 EOF
@@ -122,17 +122,21 @@ EOF
 function directory_change() {
     get_connection_info
     read -p "Quel dossier souhaitez vous modifier ?" DIRECTORY
-    read -p "Quel modfication souhaitez-vous apportez ? " CHANGE_COMMANDE
-    log_message "Début de la modification du répertoire $DIRECTORY"
+    read -p "Quel est le nouveau nom du répertoire ?" NEW_DIRECTORY_NAME
+    log "Début de la modification du répertoire $DIRECTORY"
     ssh_exe <<EOF
-  # Vérifie si le répertoire existe sur la machine distante
-  if [ -d "$DIRECTORY" ]; then
-    # Modifie les permissions du répertoire
-    $CHANGE_COMMANDE $DIRECTORY
-    echo "Le répertoire $DIRECTORY a été modifié avec succes" >> $LOG_FILE
-    exit 0
+  if [ -d "$DIRECTORY" ]
+  then
+    mv "$DIRECTORY" "$NEW_DIRECTORY_NAME"
+    if [ $? -eq 0 ]; then
+      echo "Le répertoire $DIRECTORY a été renommé en $NEW_DIRECTORY_NAME avec succès" 
+      exit 0
+    else
+      echo "Erreur : Impossible de renommer le répertoire $DIRECTORY" 
+      exit 1
+    fi
   else
-    echo "Erreur : Le répertoire $DIRECTORY n'existe pas." >> $LOG_FILE
+    echo "Erreur : Le répertoire $DIRECTORY n'existe pas." 
     exit 1
   fi
 EOF
@@ -147,12 +151,12 @@ function directory_deletion() {
     log "Début de suppression du dossier $DIRECTORY"
     ssh_exe <<EOF
     if [ -d "$DIRECTORY" ]; then # verification si le dossier existe
-        echo "Il s'agit bien d'un dossier présent." >> $LOG_FILE
+        echo "Il s'agit bien d'un dossier présent." 
     then
             rmdir $DIRECTORY # suppression
-            echo "Le dossier $DIRECTORY a bien été supprimé." >> $LOG_FILE
+            echo "Le dossier $DIRECTORY a bien été supprimé." 
     else 
-        echo "Le dossier n'existe pas." >> $LOG_FILE
+        echo "Le dossier n'existe pas." 
         exit 1
     fi
 EOF
@@ -164,11 +168,25 @@ EOF
 function firewall_rules() {
     get_connection_info
     read -p "Quel action souhaitez-vous effectuer (allow/deny) ?" ACTION
-    read -p "Sur quel port ou adresse IP ?" PORT_IP
-    log "Début de définition de règles de pare-feu"
+    if [[ "$ACTION" != "allow" && "$ACTION" != "deny" ]]; then
+        echo "Action invalide. Veuillez entrer 'allow' ou 'deny'."
+        exit 1
+    fi
+    read -p "Quel est l'adresse IP ?" IP
+    if ! [[ "$IP" =~ ^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+        echo "Adresse IP invalide. Veuillez entrer une adresse IP valide."
+        exit 1
+    fi
+    read -p "Sur quel port souhaitez-vous appliquer la règle ?" PORT
+    if ! [[ "$PORT" =~ ^[0-9]+$ ]]; then
+        echo "Port invalide. Veuillez entrer un numéro de port valide."
+        exit 1
+    fi
+    log "Début de définition de règles de pare-feu : $ACTION from $IP to any port $PORT"
     ssh_exe <<EOF
-    firewall_rules $ACTION $PORT_IP
+    ufw $ACTION from $IP to any port $PORT
     systemctl restart ufw
+    iptables -L -v -n
     echo "Règle de pare-feu appliquée avec succès."
 EOF
     log "Fin de définition de la régle"
@@ -212,9 +230,9 @@ function software_install() {
     echo "Installation du logiciel $SOFTWARE"
     apt-get update && apt-get install -y $SOFTWARE #installation
     if [ $? -eq 0 ]; then                                    #verification
-        echo "$SOFTWARE a été installé avec succès." >> $LOG_FILE
+        echo "$SOFTWARE a été installé avec succès." 
     else
-        echo "Échec de l'installation de $SOFTWARE" >> $LOG_FILE
+        echo "Échec de l'installation de $SOFTWARE" 
     fi
 EOF
     log "Fin d'installation du logiciel"
@@ -228,11 +246,11 @@ function software_uninstall() {
     log "Désinstallation du logiciel $SOFTWARE"
     ssh_exe <<EOF
     echo "Désinstallation du logiciel $SOFTWARE"
-    sudo apt-get remove --purge -y $SOFTWARE
+    apt-get remove --purge -y $SOFTWARE
     if [ $? -eq 0 ]; then #verification
-        echo "$SOFTWARE a été désinstallé avec succès." >> $LOG_FILE
+        echo "$SOFTWARE a été désinstallé avec succès." 
     else
-        echo "Échec de la désinstallation de $SOFTWARE" >> $LOG_FILE
+        echo "Échec de la désinstallation de $SOFTWARE" 
     fi
 EOF
     log "Fin d'installation du logiciel"
@@ -257,9 +275,9 @@ function remote_execution() {
     echo "Exécution du script $SCRIPT_PATH sur $CLIENT"
     ssh_exe "bash -s" <"$SCRIPT_PATH"
     if [ $? -eq 0 ]; then
-        echo "Le script a été exécuté avec succès sur $HOST." >>$LOG_FILE
+        echo "Le script a été exécuté avec succès sur $HOST."
     else
-        echo "Échec de l'exécution du script sur $HOST." >>$LOG_FILE
+        echo "Échec de l'exécution du script sur $HOST."
     fi
     log "Fin d'execution du script sur la machine $CLIENT"
     ask_continue
