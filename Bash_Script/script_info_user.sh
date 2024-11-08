@@ -7,11 +7,11 @@ GREEN='\033[0;32m'
 NC='\033[0m' # Aucune couleur
 
 # Chemin vers le fichier log
-LOG_FILE="/home/wilder/Documents/log_event.log" 
+LOG_FILE="/home/wilder/Documents/log_evt.log"
 
 # Fonction de journalisation
 function log {
-    echo "$(date "+%Y-%m-%d %H:%M:%S") - $1" >> $LOG_FILE
+    echo "$(date "+%Y-%m-%d %H:%M:%S") - $1" >>$LOG_FILE
 }
 
 # Demande les informations de connexion
@@ -23,44 +23,38 @@ function get_connection_info {
     log "Informations de connexion via SSH - Utilisateur : $USERDISTANT, Client : $CLIENT"
 }
 
-# Commande pour lancer le ssh en fonction des variables 
-function ssh_exe 
-{
+# Commande pour lancer le ssh en fonction des variables
+function ssh_exe {
     ssh "$USERDISTANT@$CLIENT" "$1"
-    }
-
-
+}
 
 # Fonction pour demander les informations sur quel utilisateur vous souhaitez des infos
-function user_name ()
-{
-    echo -e "${GREEN}Entrez le nom d'utilisateur sur lequel vous souhaitez consulter :${NC}" 
+function user_name() {
+    echo -e "${GREEN}Entrez le nom d'utilisateur sur lequel vous souhaitez consulter :${NC}"
     read USERNAME
-    }
+}
 
 # Demande si vous souhaitez poursuivre l'execution du script ou quitter
-function ask_continue ()
-{
+function ask_continue() {
     while true; do
         read -p "Souhaitez-vous effectuer une autre action ? (o/n) : " CONTINUE
         case $CONTINUE in
-            [oO]) return ;;  # Continue le script
-            [nN]) exit ;;    # Quitte le script
-            *) echo "Veuillez entrer 'o' pour oui ou 'n' pour non." ;;
+        [oO]) return ;; # Continue le script
+        [nN]) exit ;;   # Quitte le script
+        *) echo "Veuillez entrer 'o' pour oui ou 'n' pour non." ;;
         esac
     done
 }
 
-# Définition des fonctions du script : 
+# Définition des fonctions du script :
 
 # Fonction qui permet de voir la derniere date de connexion de l'utilisateur
-function last_connexion ()
-{
+function last_connexion() {
     clear
     get_connection_info
     user_name
     log "Début de consultation de la dernière connexion de l'utilisateur $USERNAME sur  $CLIENT"
-    ssh_exe <<EOF 
+    ssh_exe <<EOF
 if id "$USERNAME" &>/dev/null
     then
     echo "Date de dernière connexion de l'utilisateur $USERNAME :"
@@ -70,11 +64,10 @@ if id "$USERNAME" &>/dev/null
 fi
 EOF
     log "Fin de consultation de la dernière connexion de l'utilisateur $USERNAME sur  $CLIENT"
-    ask_continue      
+    ask_continue
 }
 # Fonction qui permet de voir la date de dernière modification du mot de passe de l'utilisateur
-function last_pwd_change () 
-{   
+function last_pwd_change() {
     clear
     get_connection_info
     user_name
@@ -83,7 +76,7 @@ function last_pwd_change ()
     if id "$USERNAME" &>/dev/null
     then
     echo "Date de dernière modification du mot de passe de l'utilisateur $USERNAME :"
-    sudo chage -l $USERNAME |  grep "Dernière modification du mot de passe"
+    chage -l $USERNAME |  grep "Dernière modification du mot de passe"
     else
     echo "L'utilisateur $USERNAME n'existe pas"
 fi
@@ -92,13 +85,12 @@ EOF
     ask_continue
 }
 # Fonction qui permet de lister les sessions ouvertes par l'utilisateur
-function user_open_session ()
-{
+function user_open_session() {
     clear
     get_connection_info
     user_name
     log "Début de consultation de la liste des sessions ouvertes par l'utilisateur $USERNAME sur $CLIENT"
-ssh_exe <<EOF
+    ssh_exe <<EOF
     if id "$USERNAME" &>/dev/null; then
         echo "Liste des sessions ouvertes par l'utilisateur :"
         who | grep "\$USERNAME"
@@ -108,15 +100,15 @@ ssh_exe <<EOF
 EOF
     log "Fin de consultation de la liste des sessions ouvertes par l'utilisateur $USERNAME sur $CLIENT"
     ask_continue
-    
+
 }
 # Fonction qui permet de voir le groupe d’appartenance de l'utilisateur
 function user_group {
     clear
     get_connection_info
-    user_name 
+    user_name
     log "Début de consultation du groupe d'appartenance de l'utilisateur $USERNAME sur $CLIENT"
-    ssh_exe <<EOF 
+    ssh_exe <<EOF
 if id "$USERNAME" &>/dev/null
     then
     echo "Groupe d'appartenance de l'utilisateur $USERNAME"
@@ -129,14 +121,13 @@ EOF
     ask_continue
 }
 # Fonction qui permet de voir l'historique des commandes exécutées par l'utilisateur
-function user_history ()
-{
+function user_history() {
     clear
     get_connection_info
     user_name
     read -p "Combien de lignes de l'historique souhaitez-vous voir ? " LINES
     log "Début de consultation l'historique des commandes exécutées par l'utilisateur $USERNAME sur $CLIENT"
-    ssh_exe <<EOF 
+    ssh_exe <<EOF
 if id "$USERNAME" &>/dev/null
     then
     echo "Historique des $LINES dernieres commandes exécutées par l'utilisateur $USERNAME"
@@ -145,12 +136,11 @@ if id "$USERNAME" &>/dev/null
     echo "L'utilisateur n'existe pas"
 fi
 EOF
-log "Fin de consultation l'historique des commandes exécutées par l'utilisateur $USERNAME sur $CLIENT"
+    log "Fin de consultation l'historique des commandes exécutées par l'utilisateur $USERNAME sur $CLIENT"
     ask_continue
 }
 # Fonction qui permet de voir les droits/permissions de l’utilisateur sur un dossier
-function right_perm_directory ()
-{
+function right_perm_directory() {
     clear
     get_connection_info
     user_name
@@ -175,17 +165,16 @@ EOF
 
     log "Fin de consultation des droits et permissions sur le dossier $DIRECTORY"
     ask_continue
-    
+
 }
 # Fonction qui permet de voir les droits/permissions de l’utilisateur sur un fichier
-function right_perm_file ()
-{
+function right_perm_file() {
     clear
     get_connection_info
     user_name
     read -p "Entrez le chemin du fichier : " FILE
     log "Début de consultation des droits et permissions sur le fichier $FILE"
-ssh_exe <<EOF
+    ssh_exe <<EOF
     if [ ! -e "$FILE" ]; then       # Vérifier si le fichier existe
         echo "Le fichier $FILE n'existe pas."
         exit 1
@@ -203,7 +192,7 @@ ssh_exe <<EOF
 EOF
     log "Fin de consultation des droits et permissions sur le fichier $FILE"
     ask_continue
-    }
+}
 
 # Définition des couleurs
 RED='\033[0;31m'
