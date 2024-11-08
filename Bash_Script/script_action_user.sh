@@ -1,4 +1,9 @@
 #!/bin/bash
+##############################################################################################
+# Menu des actions utilisateurs , ce script sera rappelé en source depuis le menu principal  #
+##############################################################################################
+
+# Fonctions 
 
 # Définition des couleurs
 RED='\033[0;31m'
@@ -216,7 +221,10 @@ EOF
     ask_continue
 }
 
+################################################################################################
+
 # Menu
+
 while true; do
     clear
     echo -e "${RED}------- Action Disponible -------${NC}"
