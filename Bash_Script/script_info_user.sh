@@ -1,5 +1,11 @@
 #!bin/bash
 
+#################################################################################################
+# Menu des informations utilisateurs, ce script sera rappelé en source depuis le menu principal #
+#################################################################################################
+
+# Fonctions :
+
 # Définition des couleurs
 RED='\033[0;31m'
 BLUE='\033[0;34m'
@@ -200,6 +206,9 @@ BLUE='\033[0;34m'
 YELLOW='\033[0;33m'
 NC='\033[0m' # Aucune couleur
 
+###############################################################################################
+
+# Menu
 while true; do
     echo -e "${RED} ----- Menu information des utilisateurs -----${NC}"
     echo ""
