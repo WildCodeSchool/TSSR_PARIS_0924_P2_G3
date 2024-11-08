@@ -1,5 +1,11 @@
 #!/bin/bash
 
+################################################################################################
+# Menu des informations ordinateurs, ce script sera rappelé en source depuis le menu principal #
+################################################################################################
+
+# Fonctions : 
+
 # Définition des couleurs
 RED='\033[0;31m'
 BLUE='\033[0;34m'
@@ -39,6 +45,7 @@ function ask_continue {
         esac
     done
 }
+################################################################################
 
 # Menu
 
