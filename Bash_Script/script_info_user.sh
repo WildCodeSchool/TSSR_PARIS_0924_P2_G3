@@ -6,11 +6,11 @@ BLUE='\033[0;34m'
 GREEN='\033[0;32m'
 NC='\033[0m' # Aucune couleur
 
-# Chemin vers le fichier log
-LOG_FILE="/home/wilder/Documents/log_evt.log"
 
 # Fonction de journalisation
 function log {
+    LOG_DATE=$(date +"%Y-%m-%d")
+    LOG_FILE="/home/wilder/Documents/log_evt_$LOG_DATE.log"
     echo "$(date "+%Y-%m-%d %H:%M:%S") - $1" >>$LOG_FILE
 }
 

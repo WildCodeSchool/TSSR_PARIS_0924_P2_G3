@@ -5,10 +5,11 @@ RED='\033[0;31m'
 NC='\033[0m' # Aucune couleur
 
 # Fonction de journalisation
-log_message() {
+log () {
     local message="$1"
-    log_file="/home/wilder/Documents/log_evt.log"
-    echo "$(date "+%Y-%m-%d %H:%M:%S") - $message" >>"$log_file"
+    LOG_DATE=$(date +"%Y-%m-%d")
+    LOG_FILE="/home/wilder/Documents/log_evt_$LOG_DATE.log"
+    echo "$(date "+%Y-%m-%d %H:%M:%S") - $message" >>"$LOG_FILE"
 }
 
 # Appel de la fonction de log pour indiquer que le script est lancé
@@ -76,17 +77,17 @@ function Menu_gestion_computer() {
     done
 }
 
-log_user() {
+log_user () {
     read -p "Consultation du fichier evt_log.log pour quel utilisateur : " LOG_USER
-    log "Extrait du journal evt_log.log pour l'utilisateur $LOGUSER"
-    cat "/home/wilder/Documents/log_evt.log"" | grep "$LOG_USER" 
+    log "Extrait du journal evt_log.log pour l'utilisateur $LOG_USER"
+    cat "/home/wilder/Documents/log_evt.log" | grep "$LOG_USER" 
     echo "Fin de consultation du fichier evt_log.log pour utilisateur"
     }
 
 log_computer (){
 read -p "Consultation du fichier evt_log.log pour quel machine : " LOG_COMP
     echo "Extrait du journal evt_log.log pour la machine $LOG_COMP"
-    cat "/home/wilder/Documents/log_evt.log"" | grep "$LOG_COMP"
+    cat "/home/wilder/Documents/log_evt.log" | grep "$LOG_COMP"
     echo "Fin de consultation du fichier evt_log.log pour la machine"
 }
 

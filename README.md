@@ -1,4 +1,7 @@
 # TSSR_PARIS_0924_P2_G3
+
+## Objectif 
+
 Ce projet vise à créer un script qui s'exécute sur une machine locale et permet d'effectuer diverses tâches sur des machines distantes, situées sur le même réseau. Le script offrira un moyen efficace et sécurisé de gérer à distance des actions et des requêtes d'information.
 
 ## Membre de l'équipe et organisation
@@ -14,18 +17,19 @@ Ce projet vise à créer un script qui s'exécute sur une machine locale et perm
 
 ## Étapes du projet
 
-Créer deux fichiers log un pour les users un pour les machines. 
-Créer le menu principale 
-Crée les scripts
-Tester en local 
-Ajouter la fonction log et ssh sur chaque scripts 
-Test à distance
+* Définition du menu principal
+* Recherche des commandes à executer
+* Création du menu principal 
+* Création des scripts
+* Teste en local 
+* Ajout des commandes d'execution à distance sur chaque scripts 
+* Test à distance
 
 ## Choix Technique
 
 connexion via ssh 
 connection via PowerShell Remoting
-1 session de connextion par action ==> sécurité / fléxibilité
+1 session de connexion par action ==> sécurité / fléxibilité
 division des scripts par menu
 appel via source ==> vigilance ++ que tout les scripts soit dans le meme dossier
 

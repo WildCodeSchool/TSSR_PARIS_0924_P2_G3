@@ -1,16 +1,16 @@
 #!/bin/bash
+
 # Définition des couleurs
 RED='\033[0;31m'
 BLUE='\033[0;34m'
 GREEN='\033[0;32m'
 NC='\033[0m' # Aucune couleur
 
-# Chemin vers le fichier log
-LOG_FILE="/home/wilder/Documents/log_evt.log"
-
 # Fonction de journalisation
 function log {
-    echo "$(date "+%Y-%m-%d %H:%M:%S") - $1" >>$LOG_FILE
+	LOG_DATE=$(date +"%Y-%m-%d")
+	LOG_FILE="/home/wilder/Documents/log_evt_$LOG_DATE.log"
+	echo "$(date "+%Y-%m-%d %H:%M:%S") - $1" >>$LOG_FILE
 }
 
 # Demande les informations de connexion
@@ -109,24 +109,11 @@ function user_deletion {
     ssh_exe <<EOF
     if grep -w $USERNAME /etc/passwd > /dev/null
     then
-#Validation de la suppression 
-        read -p "Etes vous sûre de vouloir supprimer le compte utilisateur $USERNAME  ? (o/n) : " CONTINUE
-        case $CONTINUE in
-            [oO]) userdel -r -f $USERNAME > /dev/null 2> /dev/null ;;  # Continue le script
-            [nN]) exit ;;    # Quitte le script
-            *) echo "Veuillez entrer 'o' pour oui ou 'n' pour non." ;;
-        esac
-   if grep -w $USERNAME /etc/passwd > /dev/null
-   then
-     
-       echo "Attention le compte utilisateur $USERNAME n'a pas pu être supprimé ! "
+    	userdel -r -f $USERNAME > /dev/null 2> /dev/null
+	cat /etc/passwd
+    	echo "Le compte utilisateur $USERNAME est supprimé"
    else
-      
-       echo "Le compte utilisateur $USERNAME est supprimé ! "
-   fi
-else
- 
-   echo "Le compte utilisateur $USERNAME n'exite pas "
+   	echo "Le compte utilisateur $USERNAME n'exite pas "
 fi
 EOF
     log "Fin de suppression de compte utilisateur $USERNAME "
