@@ -111,16 +111,24 @@ function Disable-User {
 function Add-ToGroup {
     Clear-Host
     $USERNAME = Get-UserName -Prompt "Entrez le nom d'utilisateur à ajouter au groupe"
-    $GROUPNAME = Get-GroupName
+    $GROUPNAME = Get-GroupName -Prompt "Entrez le nom du groupe"
     Log "Début de l'ajout de $USERNAME au groupe $GROUPNAME"
 
-    if (Get-LocalUser -Name $USERNAME -ErrorAction SilentlyContinue -and Get-LocalGroup -Name $GROUPNAME -ErrorAction SilentlyContinue) {
-        Add-LocalGroupMember -Group $GROUPNAME -Member $USERNAME
-        Write-Host "$USERNAME ajouté au groupe $GROUPNAME !" -ForegroundColor Green
-    } else {
-        Write-Host "Utilisateur ou groupe introuvable" -ForegroundColor Red
-    }
+# Vérification de l'utilisateur et du groupe
+    $userExists = Get-LocalUser -Name $USERNAME -ErrorAction SilentlyContinue
+    $groupExists = Get-LocalGroup -Name $GROUPNAME -ErrorAction SilentlyContinue
 
+        if ($userExists -and $groupExists) {
+            try {
+                Add-LocalGroupMember -Group $GROUPNAME -Member $USERNAME -ErrorAction Stop
+                Write-Host "$USERNAME ajouté au groupe $GROUPNAME !" -ForegroundColor Green
+            } catch {
+                Write-Host "Erreur lors de l'ajout : $($_.Exception.Message)" -ForegroundColor Red
+            }
+            } else {
+    Write-Host "Utilisateur ou groupe introuvable" -ForegroundColor Red
+    }      
+   
     Log "Fin de l'ajout de $USERNAME au groupe $GROUPNAME"
     Ask-Continue
 }
@@ -129,15 +137,28 @@ function Add-ToGroup {
 function Remove-FromGroup {
     Clear-Host
     $USERNAME = Get-UserName -Prompt "Entrez le nom d'utilisateur à retirer du groupe"
-    $GROUPNAME = Get-GroupName
+    $GROUPNAME = Get-GroupName -Prompt "Entrez le nom du groupe"
     Log "Début du retrait de $USERNAME du groupe $GROUPNAME"
 
-    if (Get-LocalUser -Name $USERNAME -ErrorAction SilentlyContinue -and Get-LocalGroup -Name $GROUPNAME -ErrorAction SilentlyContinue) {
-        Remove-LocalGroupMember -Group $GROUPNAME -Member $USERNAME
-        Write-Host "$USERNAME retiré du groupe $GROUPNAME !" -ForegroundColor Green
-    } else {
-        Write-Host "Utilisateur ou groupe introuvable" -ForegroundColor Red
-    }
+# Vérification de l'utilisateur et du groupe
+    $userExists = Get-LocalUser -Name $USERNAME -ErrorAction SilentlyContinue
+    $groupExists = Get-LocalGroup -Name $GROUPNAME -ErrorAction SilentlyContinue
+    if ($userExists -and $groupExists) {
+        try {
+            Remove-LocalGroupMember -Group $GROUPNAME -Member $USERNAME -ErrorAction Stop
+            Write-Host "$USERNAME retiré du groupe $GROUPNAME !" -ForegroundColor Green
+        } catch {
+            Write-Host "Erreur lors du du groupe : $($_.Exception.Message)" -ForegroundColor Red
+        }
+        } else {
+Write-Host "Utilisateur ou groupe introuvable" -ForegroundColor Red
+}    
+   # if (Get-LocalUser -Name $USERNAME -ErrorAction SilentlyContinue -and Get-LocalGroup -Name $GROUPNAME -ErrorAction SilentlyContinue) {
+    #    Remove-LocalGroupMember -Group $GROUPNAME -Member $USERNAME
+     #   Write-Host "$USERNAME retiré du groupe $GROUPNAME !" -ForegroundColor Green
+    #} else {
+    #    Write-Host "Utilisateur ou groupe introuvable" -ForegroundColor Red
+    #}
 
     Log "Fin du retrait de $USERNAME du groupe $GROUPNAME"
     Ask-Continue
