@@ -1,16 +1,16 @@
 # Demander la machine d'intervention
 Clear-Host
-#$Client = Read-Host -Prompt "Entrez l'adresse IP ou le nom de la machine distante"
-#$User = Read-Host -Prompt "Avec quel utilisateur souhaitez-vous vous connecter ?"
-
-# Connexion SSH
-#ssh "$User@$Client"
+# Définition des couleurs
+$RED = "`e[31m"
+$BLUE = "`e[34m"
+$GREEN = "`e[32m"
+$NC = "`e[0m"  # Aucune couleur
 
 # Fonction pour gérer le Menu utilisateur
 function Menu-GestionUser {
     while ($true) {
         Clear-Host
-        Write-Output "--- Menu de l'utilisateur ---"
+        Write-Output "${RED}------- Menu de l'utilisateur -------${NC}"
         Write-Output "1) Action sur l'utilisateur"
         Write-Output "2) Information sur l'utilisateur"
         Write-Output "3) Revenir au menu principal"
@@ -19,9 +19,9 @@ function Menu-GestionUser {
         $choice = Read-Host -Prompt "Choisissez une option"
 
         switch ($choice) {
-            1 { .\script_action_user.ps1 } # Remplacez par le bon chemin si nécessaire
+            1 { C:\Users\Administrator\Documents\TSSR_PARIS_0924_P2_G3\script_action_user.ps1 } # Remplacez par le bon chemin si nécessaire
             2 { .\script_info_user.ps1 }
-            3 { return }
+            3 { return  }
             4 { exit }
             default { Write-Output "Option incorrecte" }
         }
@@ -32,7 +32,7 @@ function Menu-GestionUser {
 function Menu-GestionComputer {
     while ($true) {
         Clear-Host
-        Write-Output "--- Menu de l'ordinateur ---"
+        Write-Output "${RED}------- Menu de l'ordinateur -------${NC}"
         Write-Output "1) Action sur l'ordinateur"
         Write-Output "2) Information sur l'ordinateur"
         Write-Output "3) Revenir au menu principal"
@@ -54,7 +54,7 @@ function Menu-GestionComputer {
 function Journal {
     while ($true) {
         Clear-Host
-        Write-Output "------- Menu Journal ---------"
+        Write-Output "${RED}------- Menu Journal -------${NC}"
         Write-Output "1) Événements sur l'utilisateur"
         Write-Output "2) Événements sur l'ordinateur"
         Write-Output "3) Revenir au menu principal"
@@ -73,7 +73,7 @@ function Journal {
 # Menu principal
 while ($true) {
     Clear-Host
-    Write-Output "--- Menu Principal ---"
+    Write-Output "${RED}------- Menu Principal -------${NC}"
     Write-Output "1) Gestion de l'utilisateur"
     Write-Output "2) Gestion de la machine"
     Write-Output "3) Consultation des journaux"
