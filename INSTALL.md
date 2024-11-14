@@ -30,7 +30,7 @@ L'utilisateur distant doit avoir les permissions nécessaires pour exécuter les
 Certains script devront s'exécuter avec le root.
 
 #### 1.2 Connexion à distance via SSH
-1.**Installation de SSH :**
+a. **Installation de SSH :**
    Sur chaque machine Debian/Ubuntu, vous devez vous assurer que le service SSH est installé et actif.
    ```bash
    sudo apt update
@@ -39,14 +39,14 @@ Certains script devront s'exécuter avec le root.
    sudo systemctl start ssh
    ```
    
-2. **Vérifier le statut du service SSH :**
+b. **Vérifier le statut du service SSH :**
    Vérifiez si SSH fonctionne correctement en exécutant :
    ```bash
    sudo systemctl status ssh
    ```
 
 
-3. **Vérification de la connectivité SSH** :
+c. **Vérification de la connectivité SSH** :
    Assurez-vous que vous pouvez vous connecter à chaque machine via SSH depuis une autre machine :
    ```bash
    ssh user@adresse_ip
@@ -55,25 +55,17 @@ Certains script devront s'exécuter avec le root.
 
 Pour la gestion du pare-feu le script utilise la commande **UFW** qui n'est pas installer par défaut sur Debian et Ubuntu voici comment l'installer 
 
-1. **Installer UFW**
+a. **Installer UFW** `sudo apt update sudo apt install ufw`
 
-`sudo apt update sudo apt install ufw`
+b. **Activer UFW et autoriser SSH**
 
-2. **Activer UFW et autoriser SSH**
-
-- Activer UFW :
-       
-    `sudo ufw enable`
+- Activer UFW :  `sudo ufw enable`
     
-- Autoriser SSH :
-   
-    `sudo ufw allow ssh``
+- Autoriser SSH :  `sudo ufw allow ssh`
     
-3. **Vérifier le statut de UFW** :
+c. **Vérifier le statut de UFW** :
     
-    Après l'avoir activé, tu peux vérifier que les règles sont bien appliquées avec :
-    
-    `sudo ufw status`
+- Après l'avoir activé, tu peux vérifier que les règles sont bien appliquées avec : `sudo ufw status`
 
 
 
@@ -85,10 +77,10 @@ Pour la gestion du pare-feu le script utilise la commande **UFW** qui n'est pas 
 
 #### 2.2 Connexion à distance via PowerShell Remoting
 
-1. **Activer le remoting** :
+a. **Activer le remoting** :
    Ouvrir une session PowerShell en tant qu'administrateur et exécutez la commande suivante sur chaque machine Windows :
    
-   Enable-PSRemoting -Force
+   `Enable-PSRemoting -Force`
 
 
 Cette commande va :
@@ -97,14 +89,14 @@ Cette commande va :
 - Configurer le service WinRM pour qu'il démarre automatiquement.
 - Ouvrir les ports nécessaires dans le pare-feu.
 
-2. Vérifier l'état du service WinRM
-Get-Service WinRM
+b. **Vérifier l'état du service WinRM**
+	`Get-Service WinRM`
 
 Si le service n'est pas en cours d'exécution, vous pouvez le démarrer avec :
-Start-Service WinRM
+	`Start-Service WinRM`
 
-3. Tester la connexion à distance : 
-Enter-PSSession -ComputerName "<IPdeLOrdinateurDistant>" -Credential ""
+c. **Tester la connexion à distance** 
+	`Enter-PSSession -ComputerName "<IPdeLOrdinateurDistant>" -Credential ""`
 
 
 #### 2.3 Configurer la politique d'exécution
