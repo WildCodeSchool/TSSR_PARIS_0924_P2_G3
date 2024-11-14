@@ -5,16 +5,19 @@
 
 1. [Prérequis Techniques](#prerequis)
    - [Server Debian et Ubuntu](#server-debian-et-ubuntu)
-      - [Permissions utilisateurs](#IPermissions-Utilisateurs)
-      - [Connexion à distance via SSH](#Connexion-à-distance-via-SSH)
-      - [Gestion des pare-feu : UFW](#pare-feus)   
-   - [ Server Windows]
-      - [Permissions utilisateurs](#IPermissions-Utilisateurs)
+      - [Permissions utilisateurs](#permissions-utilisateurs)
+      - [Connexion à distance via SSH](#Connexion-a-distance-via-SSH)
+      - [Gestion des pare-feus : UFW](#gestion-des-pare-feus-:-UFW)   
+   - [Windows Server et Windows](#Windows-Server-et-Windows)
+      - [Permissions utilisateurs](#Permissions-utilisateurs)
       - [Connexion à distance via PowerShell Remoting](#Connexion-à-distance-via-Powershell-Remoting)
-      - [Gestion des pare-feu : ](#pare-feus)  
-2. [Installation et configuration des scripts](#intallation-et-configuration-des-scripts)
-5. [Exécution des scripts](#execution-des-scripts)
-6. [FAQ]
+      - [Configurer la politique d'exécution](#Configurer-la-politique-dexécution)
+      - [Gestion des pare-feus](#Gestion-des-pare-feus)  
+2. [Etapes d'installation et configuration des scripts](#Etapes-dinstallation-et-configuration-des-scripts)
+   - [Téléchargement sur la machine](#Téléchargement-sur-la-machine)
+   - [*Attribution des permissions nécessaires](#*Attribution-des-permissions-nécessaires)
+3. [Exécution des scripts](#execution-des-scripts)
+4. [FAQ]
 
    
 
@@ -22,11 +25,11 @@
 
 ### 1. Serveurs Debian et Ubuntu
 
-#### 1.1.. Permissions utilisateurs
+#### 1.1 Permissions utilisateurs
 L'utilisateur distant doit avoir les permissions nécessaires pour exécuter les commandes que vous souhaitez. Pour des actions administratives, il est recommandé d'avoir des privilèges `sudo`.
 Certains script devront s'exécuter avec le root.
 
-#### 1.2. Connexion à distance via SSH
+#### 1.2 Connexion à distance via SSH
 1.**Installation de SSH :**
    Sur chaque machine Debian/Ubuntu, vous devez vous assurer que le service SSH est installé et actif.
    ```bash
@@ -48,7 +51,7 @@ Certains script devront s'exécuter avec le root.
    ```bash
    ssh user@adresse_ip
    ```
-#### 1.3. Gestion des pare-feu : UFW
+#### 1.3 Gestion des pare-feus : UFW
 
 Pour la gestion du pare-feu le script utilise la commande **UFW** qui n'est pas installer par défaut sur Debian et Ubuntu voici comment l'installer 
 
@@ -76,7 +79,8 @@ Pour la gestion du pare-feu le script utilise la commande **UFW** qui n'est pas 
 
 ### 2. Windows Server et Windows 
 
-#### 2.1 Permissions utilisateurs :
+#### 2.1 Permissions utilisateurs
+
    L'utilisateur doit disposer de privilèges d'administrateur sur la machine distante  Windows.
 
 #### 2.2 Connexion à distance via PowerShell Remoting
@@ -103,7 +107,7 @@ Start-Service WinRM
 Enter-PSSession -ComputerName "<IPdeLOrdinateurDistant>" -Credential ""
 
 
-#### 2.3  **Configurer la politique d'exécution** :
+#### 2.3 Configurer la politique d'exécution
    Si nécessaire, ajustez la politique d'exécution des scripts PowerShell pour autoriser l'exécution à distance :
    
    ```powershell
@@ -111,7 +115,7 @@ Enter-PSSession -ComputerName "<IPdeLOrdinateurDistant>" -Credential ""
    ```
 
    
-### 2.4 Pare-feu 
+### 2.4 Gestion des pare-feus 
 
 Pour ce projet les pare-feu ont été désactivé donc aucune gestion n'est requise
 
