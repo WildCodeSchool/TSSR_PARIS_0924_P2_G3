@@ -94,7 +94,7 @@ while true; do
     2)
         get_connection_info
         log "Début de consultation du nom de disque présent sur la machine"
-        ssh_exe "echo \"Nombre de disque:\" ; df -h"
+        ssh_exe "echo \"Nombre de disque:\" ; fdisk -l"
         log "Fin de consultation du nombre de disque présent sur la machine"
         ask_continue
         ;;
