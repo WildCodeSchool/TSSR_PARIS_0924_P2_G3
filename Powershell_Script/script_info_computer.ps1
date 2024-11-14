@@ -6,7 +6,7 @@ $credential = Get-Credential
 
 # Fonction pour afficher le menu
 function Show-Menu {
-    Write-Host "===== Menu d'actions ====="
+    Write-Host "===== Menu d'actions =====" -ForegroundColor Red
     Write-Host "1. Version de l'OS"
     Write-Host "2. Nombre de disque"
     Write-Host "3. Partition (nombre, nom, FS, taille) par disque"
@@ -91,7 +91,7 @@ while (-not $exitScript) {
         }
         '12' {
             Write-Host "Revenir au menu précédent."
-            # Ici tu peux ajouter des actions spécifiques pour cette option si nécessaire.
+            return "C:\Users\Administrateur.WIN-CRQM0S4BP56\Documents\TSSR_PARIS_0924_P2_G3\Powershell_Script\script_windows.ps1" 
         }
         '13' {
             $exitScript = $true

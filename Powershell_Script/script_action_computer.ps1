@@ -6,7 +6,7 @@ $credential = Get-Credential
 
 # Fonction pour afficher le menu
 function Show-Menu {
-    Write-Host "===== Menu d'actions ====="
+    Write-Host "===== Menu d'actions =====" -ForegroundColor Red
     Write-Host "1. Arrêt"
     Write-Host "2. Redémarrage"
     Write-Host "3. Verrouillage"
@@ -21,7 +21,8 @@ function Show-Menu {
     Write-Host "12. Installation de logiciel"
     Write-Host "13. Désinstallation de logiciel"
     Write-Host "14. Exécution de script"
-    Write-Host "Q. Quitter"
+    Write-Host "15. Revenir au Menu principal"
+    Write-Host "16. Quitter"
     Write-Host "==========================="
 }
 
@@ -137,7 +138,10 @@ while (-not $exitScript) {
                 & $scriptPath
             } -ArgumentList $scriptPath -credential $credential
         }
-        'Q' {
+        '15' {
+            return "C:\Users\Administrateur.WIN-CRQM0S4BP56\Documents\TSSR_PARIS_0924_P2_G3\Powershell_Script\script_windows.ps1" 
+        }
+        '16' {
             $exitScript = $true
             Write-Host "Quitter le script."
         }
