@@ -61,12 +61,12 @@ Le principal risque est que la modularité crée des dépendances entre les sous
 
 #### Fonctions communes à chaque script 
 
-**Fonction de journalisation**
+- **Fonction de journalisation**
 
 Chaque script dispose d'une fonction "log" qui permet de créer un fichier de log avec une date spécifique au format `log_evt_YYYY-MM-DD.log`.
 Chaque jour, elle génère un fichier de log distinct dans le répertoire `/home/wilder/Documents/`. 
 
-**Connexion à distance**
+- **Connexion à distance**
 
 Les fonctions "get_connection_info" et "$credential"  récupèrent les informations de connexion à distance.
 Il vous sera demander d'entrer l'adresse IP de la machine, le nom de l'utilisateur avec lequel vous souhaitez vous connecter sur la machine distante puis de saisir son mot de passe.
@@ -78,7 +78,7 @@ Ce qui offre la possibilité gérer plusieurs clients depuis le même script.
 Sur Windows Server, la session est ouverte une seule fois au début du script avec `New-PSSession`. Lorsque l'utilisateur choisit une action, le script exécute la commande correspondante via la session persistante en utilisant `Invoke-Command` sur cette session.
 Pour changer de client il faut sortir du script et relancer une nouvelle session.
 
-**Poursuite du script**
+- **Poursuite du script**
 
  Sur Debian, à la fin de chaque action la fonction "ask_user" demande à l'utilisateur s'il souhaite continuer avec une autre action ou quitter le script. 
  Sur Windows Server le menu se réaffiche automatiquement , l'utilisateur peut choisir de quitter le script à ce moment la.
