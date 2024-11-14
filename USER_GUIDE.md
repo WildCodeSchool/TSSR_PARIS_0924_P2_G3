@@ -137,9 +137,10 @@ Pour changer de client il faut sortir du script et relancer une nouvelle session
    ```bash
    ./script_debian.sh
    ```
-3. Le script affiche un menu avec les options disponibles, les commandes sont déjà configurés pour s'exécuter à distance. (capture)
+3. Le script affiche un menu avec les options disponibles, les commandes sont déjà configurés pour s'exécuter à distance. 
+![menushell](https://github.com/user-attachments/assets/63c7b618-c95f-4ff1-8f70-a9947d7fe8b0)
+Suivez les instructions pour naviguer dans le menu.
 
-   Suivez les instructions pour naviguer dans le menu.
 4. Le script demandera à l'utilisateur de spécifier les informations suivantes :
    - **Nom de l'utilisateur distant** : Entrez l'utilisateur sous lequel vous souhaitez vous connecter à la machine distante.(ex: wilder)
    - **Adresse IP ou nom de la machine distante** : Entrez l'IP ou le nom d'hôte de la machine distante (ex : 172.16.10.30).
@@ -153,8 +154,11 @@ Pour changer de client il faut sortir du script et relancer une nouvelle session
    ```powershell
    .\script_windows.ps1
    ```
-3. Le script affiche un menu avec les options disponibles, les commandes sont déjà configuré pour s'exécuter à distance. Suivez les instructions pour naviguer dans les options. (capture)
-4. Le script demandera à l'utilisateur de spécifier les informations suivantes :
+3. Le script affiche un menu avec les options disponibles, les commandes sont déjà configuré pour s'exécuter à distance.
+![menushell](https://github.com/user-attachments/assets/7796cf1b-fe82-46b8-8926-035d7223f011)
+Suivez les instructions pour naviguer dans les options. 
+
+6. Le script demandera à l'utilisateur de spécifier les informations suivantes :
 - **Adresse IP ou nom de la machine distante** : Entrez l'IP de la machine distante (ex : `172.16.10.20`).
 - **Nom de l'utilisateur distant** : Entrez l'utilisateur sous lequel vous souhaitez vous connecter à la machine distante.(ex: wilder)
    - Dans certains script le nom de l'utilisateur sur lequel l'action doit être effectué
