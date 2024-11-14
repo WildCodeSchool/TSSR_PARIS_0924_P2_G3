@@ -19,7 +19,7 @@ function Show-Menu {
     Write-Host "10. Utilisation du disque"
     Write-Host "11. Utilisation du processeur"
     Write-Host "12. Revenir au menu précedent"
-    Write-Host "Q. Quitter"
+    Write-Host "13. Quitter"
     Write-Host "==========================="
 }
 
@@ -93,7 +93,7 @@ while (-not $exitScript) {
             Write-Host "Revenir au menu précédent."
             # Ici tu peux ajouter des actions spécifiques pour cette option si nécessaire.
         }
-        'Q' {
+        '13' {
             $exitScript = $true
             Write-Host "Quitter le script."
         }
