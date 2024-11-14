@@ -8,8 +8,8 @@
    - [Fonctions communes à chaque script](#fonctions-communes-à-chaque-script) 
    - [Commandes préconfigurées](#commandes-préconfigurées)
 1. [Utilisation de Base](#utilisation-de-base)
-   - [Exécution du Script Debian/Ubuntu via SSH](#exécution-du-Script-Debian/Ubuntu-via-SSH)
-   - [Exécution du Script Windows via PowerShell](#exécution-du-script-windows-via-powershell)
+   - [Exécution du Script Debian/Ubuntu via SSH](#execution-du-script-debianubuntu-via-ssh)
+   - [Exécution du Script Windows via PowerShell](#execution-du-script-windows-via-powershell)
 
 2. [Problèmes courants et solutions](#problèmes-courants-et-solutions)
 3. [Conclusion](#conclusion)
