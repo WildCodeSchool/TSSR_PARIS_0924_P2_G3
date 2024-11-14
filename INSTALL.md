@@ -3,10 +3,10 @@
 ## Sommaire 
 
 
-1. [Prérequis Techniques](#prérequis-technique)
-   - [Server Debian et Ubuntu](#server-debian-et-ubuntu)
+1. [Prérequis Techniques](#prérequis-techniques)
+   - [Serveurs Debian et Ubuntu](#serveurs-debian-et-ubuntu)
       - [Permissions utilisateurs](#permissions-utilisateurs)
-      - [Connexion à distance via SSH](#connexion-a-distance-via-shh)
+      - [Connexion à distance via SSH](#connexion-à-distance-via-ssh)
       - [Gestion des pare-feus](#gestion-des-pare-feus)   
    - [Windows Server et Windows](#windows-server-et-windows)
       - [Permissions utilisateurs](#permissions-utilisateurs)
@@ -25,11 +25,11 @@
 
 ### Serveurs Debian et Ubuntu
 
-#### 1 Permissions utilisateurs
+#### Permissions utilisateurs
 L'utilisateur distant doit avoir les permissions nécessaires pour exécuter les commandes que vous souhaitez. Pour des actions administratives, il est recommandé d'avoir des privilèges `sudo`.
 Certains script devront s'exécuter avec le root.
 
-#### 2 Connexion à distance via SSH
+#### Connexion à distance via SSH
 a. **Installation de SSH :**
    Sur chaque machine Debian/Ubuntu, vous devez vous assurer que le service SSH est installé et actif.
    ```bash
@@ -51,7 +51,7 @@ c. **Vérification de la connectivité SSH** :
    ```bash
    ssh user@adresse_ip
    ```
-#### 3 Gestion des pare-feus
+#### Gestion des pare-feus
 
 Pour la gestion du pare-feu le script utilise la commande **UFW** qui n'est pas installer par défaut sur Debian et Ubuntu voici comment l'installer 
 
@@ -71,11 +71,11 @@ c. **Vérifier le statut de UFW** :
 
 ### Windows Server et Windows 
 
-#### 1 Permissions utilisateurs
+#### Permissions utilisateurs
 
    L'utilisateur doit disposer de privilèges d'administrateur sur la machine distante  Windows.
 
-#### 2 Connexion à distance via PowerShell Remoting
+#### Connexion à distance via PowerShell Remoting
 
 a. **Activer le remoting** :
    Ouvrir une session PowerShell en tant qu'administrateur et exécutez la commande suivante sur chaque machine Windows :
@@ -99,7 +99,7 @@ c. **Tester la connexion à distance**
 	`Enter-PSSession -ComputerName "<IPdeLOrdinateurDistant>" -Credential ""`
 
 
-#### 3 Configurer la politique d'exécution
+#### Configurer la politique d'exécution
    Si nécessaire, ajustez la politique d'exécution des scripts PowerShell pour autoriser l'exécution à distance :
    
    ```powershell
@@ -107,53 +107,53 @@ c. **Tester la connexion à distance**
    ```
 
    
-### 4 Gestion des pare-feus 
+### Gestion des pare-feus 
 
 Pour ce projet les pare-feu ont été désactivé donc aucune gestion n'est requise
 
 
 ## Etapes d'installation et configuration des scripts
 
-1. Téléchargement sur la machine : 
-
-a ) Installer git 
+- ### Installer Git
 
 Sur **Debian/Ubuntu** :
 	sudo apt update && sudo apt install git
 
 
 Sur **Windows**
-1. Téléchargez l'installateur depuis [git-scm.com](https://git-scm.com/).
-2. Suivez l'assistant d'installation.
+	1. Téléchargez l'installateur depuis [git-scm.com](https://git-scm.com/).
+	2. Suivez l'assistant d'installation.
 	
-b ) générer et configurer une clé ssh
+- ### Générer et configurer une clé ssh
 
-- Générez une clé SSH (si vous n'en avez pas) :
+	1 Générez une clé SSH (si vous n'en avez pas) :
         
-    `ssh-keygen -t rsa -b 4096 -C "votre_email@example.com"`
+  `ssh-keygen -t rsa -b 4096 -C "votre_email@example.com"`
     
-- Ajoutez la clé SSH à votre agent SSH :
+	ou 2 Ajoutez la clé SSH à votre agent SSH :
     
-    `eval "$(ssh-agent -s)" ssh-add ~/.ssh/id_rsa`
+    	`eval "$(ssh-agent -s)" ssh-add ~/.ssh/id_rsa`
     
-- Ajoutez la clé publique (`~/.ssh/id_rsa.pub`) à votre compte GitHub, GitLab, ou autre service Git.
+	- Ajoutez la clé publique (`~/.ssh/id_rsa.pub`) à votre compte GitHub, GitLab, ou autre service Git.
 
-c)  Clonez le projet 
+- ### Clonez le projet 
 
-git clone "git@github.com:WildCodeSchoo/TSSR_PARIS_0924_P2_G3.git"
+	git clone "git@github.com:WildCodeSchoo/TSSR_PARIS_0924_P2_G3.git"
 
-   - Pour Debian/Ubuntu :  `script_debian.sh`
-   - Pour Windows : `script_windows.ps1`
+ - ### Noms des scripts
+ 
+ 	- Pour Debian/Ubuntu :  `script_debian.sh`
+ 	- Pour Windows : `script_windows.ps1`
 
-2. Attribution des permissions nécessaires :
+- ### Attribution des permissions nécessaires :
    
-   2.1 Pour Ubuntu
+   	1 Pour Ubuntu
    Pour exécuter le script sur les machines distantes, vous devrez vous assurer que l'utilisateur a les droits d'exécution :
    ```bash
    chmod +x script_debian.sh
    ```
 
-   2.2 Pour Windows
+   	2 Pour Windows
    Assurez vous que le script possède l'extension `.ps1` et que les politiques d'exécution permettent son exécution.
 
 
