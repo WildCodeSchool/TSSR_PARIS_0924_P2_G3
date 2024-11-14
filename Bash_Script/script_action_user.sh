@@ -100,7 +100,7 @@ while
 do
     echo "Le compte utilisateur $USERNAME n'existe pas."
 done
-    passwd $USERNAME
+    chpasswd $USERNAME
 EOF
     log "Fin du changement de mot de passe de l'utilisateur $USERNAME "
     ask_continue
