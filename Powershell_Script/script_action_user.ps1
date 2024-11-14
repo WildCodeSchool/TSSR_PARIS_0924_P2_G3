@@ -28,7 +28,7 @@ function Execute-RemoteCommand {
     param (
         [string]$Command
     )
-    Invoke-Command -ComputerName $remoteComputer -Credential $Crcredential -ScriptBlock {
+    Invoke-Command -ComputerName $remoteComputer -Credential $credential -ScriptBlock {
         param ($Command) Invoke-Expression $Command
     } -ArgumentList $Command
 }
@@ -83,7 +83,7 @@ function Add-ToGroup {
     $GROUPNAME = Read-Host "Entrez le nom du groupe"
     Log "Début de l'ajout de $USERNAME au groupe $GROUPNAME sur $remoteComputer"
 
-    Execute-RemoteCommand -Command "if (Get-LocalUser -Name '$USERNAME' -ErrorAction SilentlyContinue -and Get-LocalGroup -Name '$GROUPNAME' -ErrorAction SilentlyContinue) { Add-LocalGroupMember -Group '$GROUPNAME' -Member '$USERNAME'; 'Utilisateur $USERNAME ajouté au groupe $GROUPNAME.' } else { 'Utilisateur ou groupe introuvable.' }"
+    Execute-RemoteCommand -Command "if (Get-LocalUser -Name "$USERNAME" -ErrorAction SilentlyContinue -and Get-LocalGroup -Name "$GROUPNAME" -ErrorAction SilentlyContinue) { Add-LocalGroupMember -Group "$GROUPNAME" -Member "$USERNAME"; 'Utilisateur $USERNAME ajouté au groupe $GROUPNAME.' } else { 'Utilisateur ou groupe introuvable.' }"
 
     Log "Fin de l'ajout de $USERNAME au groupe $GROUPNAME sur $remoteComputer"
     Ask-Continue
@@ -116,10 +116,12 @@ function Ask-Continue {
 # Menu principal
 do {
     Clear-Host
-    Write-Host "${RED}------- Actions Disponibles -------${NC}"
+    Write-Host "------- Actions Disponibles -------" -ForegroundColor Red
+    Write-Host "----- Gestion des Utilisateurs -----" -ForegroundColor Blue
     Write-Host "1) Création d'un utilisateur"
     Write-Host "2) Changement de mot de passe"
     Write-Host "3) Suppression d'un utilisateur"
+    Write-Host "----- Gestion des Groupes -----" -ForegroundColor Blue
     Write-Host "4) Ajout à un groupe"
     Write-Host "5) Retrait d'un groupe"
     Write-Host "6) Revenir au Menu principal"

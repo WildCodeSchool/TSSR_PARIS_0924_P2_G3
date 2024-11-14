@@ -10,7 +10,7 @@ $NC = "`e[0m"  # Aucune couleur
 function Menu-GestionUser {
     while ($true) {
         Clear-Host
-        Write-Output "${RED}------- Menu de l'utilisateur -------${NC}"
+        Write-Host "===== Menu de l'utilisateur =====" -ForegroundColor Red
         Write-Output "1) Action sur l'utilisateur"
         Write-Output "2) Information sur l'utilisateur"
         Write-Output "3) Revenir au menu principal"
@@ -32,7 +32,7 @@ function Menu-GestionUser {
 function Menu-GestionComputer {
     while ($true) {
         Clear-Host
-        Write-Output "${RED}------- Menu de l'ordinateur -------${NC}"
+        Write-Host "===== Menu de l'ordinateur =====" -ForegroundColor Red
         Write-Output "1) Action sur l'ordinateur"
         Write-Output "2) Information sur l'ordinateur"
         Write-Output "3) Revenir au menu principal"
@@ -73,7 +73,7 @@ function Journal {
 # Menu principal
 while ($true) {
     Clear-Host
-    Write-Output "${RED}------- Menu Principal -------${NC}"
+    Write-Host "===== Menu Principal =====" -ForegroundColor Red
     Write-Output "1) Gestion de l'utilisateur"
     Write-Output "2) Gestion de la machine"
     Write-Output "3) Consultation des journaux"
