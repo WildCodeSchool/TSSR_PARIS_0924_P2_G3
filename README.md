@@ -33,31 +33,41 @@ Un objectif secondaire, consiste à étendre cette gestion à des machines clien
 
 - 2 clients sont mis en place :
 
-**Client Windows 10 :** 
-- Nom : CLIWIN01
-- Compte utilisateur : wilder (dans le groupe des admins locaux)
-- Mot de passe : Azerty1*
-- Adresse IP fixe : 172.16.10.20/24
+| Client          |Windows 10 |                                            
+| --------------- | ---------------------- |                
+| Nom             | CLIWIN01               |
+| Compte          |  wilder (dans le groupe des admins locaux)|
+| Mot de passe    | Azerty1*               |
+| Adresse IP fixe | 172.16.10.20/24         |
 
-**Client Ubuntu 22.04/24.04 LTS :**
-- Nom : CLILIN01
-- Compte utilisateur : wilder (dans le groupe sudo)
-- Mot de passe : Azerty1*
-- Adresse IP fixe : 172.16.10.30/24
+
+
+| Client          | Ubuntu 22.04/24.04 LTS |
+| --------------- | ---------------------- |
+| Nom             | CLILIN01               |
+| Compte          | wilder (dans le groupe sudo)|
+| Mot de passe    | Azerty1*               |
+| Adresse IP fixe | 172.16.10.30/24         |
+
+ 
 
 - 2 serveurs sont mis en place :
 
-**Serveur Windows Server 2022 :**
-- Nom : SRVWIN01
-- Compte : Administrator (dans le groupe des admins locaux)
-- Mot de passe : Azerty1*
-- Adresse IP fixe : 172.16.10.5/24
+| Serveur         | Serveur Windows Server 2022 |
+| --------------- | ---------------------- |
+| Nom             | SRVWIN01               |
+| Compte          | Administrator(dans le groupe des admins locaux)|
+| Mot de passe    | Azerty1*               |
+| Adresse IP fixe | 172.16.10.5/24         |
 
-**Serveur Debian 12 :**
-- Nom : SRVLX01
-- Compte : root
-- Mot de passe : Azerty1*
-- Adresse IP fixe : 172.16.10.10/24
+
+
+| Serveur          | Serveur Debian 12  |
+| --------------- | ---------------------- |
+| Nom             | SRVLX01                |
+| Compte          | root                   |
+| Mot de passe    | Azerty1*               |
+| Adresse IP fixe | 172.16.10.10/24        |
 
 
 - Connection à distance : 
@@ -87,8 +97,8 @@ Lors de l'utilisation d'un pseudo-terminal, l'accès en tant que **root** était
 
 L'identification et la résolution des erreurs lors de l'exécution de commandes à distance peuvent être difficiles, surtout en cas de problèmes de communication ou de configuration. Le processus de répertorier, réessayer et ajuster les paramètres peut être long et fastidieux.
 
-De plus, pour désactiver le message de bienvenue qui s'affiche à la connexion, la solution trouvée a été de désactiver le message d'accueil en exécutant la commande suivante :  
-`sudo chmod -x /etc/update-motd.d/*`
+De plus, pour désactiver le message de bienvenue qui s'affiche à la connexion, la solution trouvée a été de désactiver le message d'accueil en exécutant la commande suivante :  **`sudo chmod -x /etc/update-motd.d/`**
+
 
 ## Axe d'amélioration possible
 
