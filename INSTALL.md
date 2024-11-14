@@ -14,10 +14,12 @@
       - [Configurer la politique d'exécution](#configurer-la-politique-dexécution)
       - [Gestion des pare-feus](#gestion-des-pare-feus)  
 2. [Etapes d'installation et configuration des scripts](#etapes-dinstallation-et-configuration-des-scripts)
-   - [Téléchargement sur la machine](#téléchargement-sur-la-machine)
-   - [Attribution des permissions nécessaires](#Attribution-des-permissions-nécessaires)
-3. [Exécution des scripts](#exécution-des-scripts)
-4. [FAQ](#FAQ)
+   - [Télécharger Git sur la machine](#télécharger-git-sur-la-machine)
+   - [Clonez le projet](Clonez-le-projet)
+   - [Noms des scripts](Noms-des-scripts)
+   - [Attribution des permissions nécessaires](#attribution-des-permissions-nécessaires)
+4. [Exécution des scripts ](#exécution-des-scripts)
+5. [FAQ](#FAQ)
 
    
 
@@ -114,9 +116,11 @@ Pour ce projet les pare-feu ont été désactivé donc aucune gestion n'est requ
 
 ## Etapes d'installation et configuration des scripts
 
-- ### Installer Git
+- ### Télécharger Git sur la machine
 
+	
 Sur **Debian/Ubuntu** :
+
 	sudo apt update && sudo apt install git
 
 
@@ -124,7 +128,7 @@ Sur **Windows**
 	1. Téléchargez l'installateur depuis [git-scm.com](https://git-scm.com/).
 	2. Suivez l'assistant d'installation.
 	
-- ### Générer et configurer une clé ssh
+	- #### Générer et configurer une clé ssh
 
 	1 Générez une clé SSH (si vous n'en avez pas) :
         
@@ -145,7 +149,7 @@ Sur **Windows**
  	- Pour Debian/Ubuntu :  `script_debian.sh`
  	- Pour Windows : `script_windows.ps1`
 
-- ### Attribution des permissions nécessaires :
+- ### Attribution des permissions nécessaires 
    
    	1 Pour Ubuntu
    Pour exécuter le script sur les machines distantes, vous devrez vous assurer que l'utilisateur a les droits d'exécution :
@@ -157,7 +161,7 @@ Sur **Windows**
    Assurez vous que le script possède l'extension `.ps1` et que les politiques d'exécution permettent son exécution.
 
 
-#### Exécution des scripts : 
+#### Exécution des scripts  
  
 1. **Lancement des scripts** :
    
