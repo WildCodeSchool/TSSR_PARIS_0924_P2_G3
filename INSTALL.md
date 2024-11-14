@@ -3,33 +3,33 @@
 ## Sommaire 
 
 
-1. [Prérequis Techniques](#prerequis)
+1. [Prérequis Techniques](#prérequis-technique)
    - [Server Debian et Ubuntu](#server-debian-et-ubuntu)
       - [Permissions utilisateurs](#permissions-utilisateurs)
-      - [Connexion à distance via SSH](#Connexion-a-distance-via-SSH)
+      - [Connexion à distance via SSH](#connexion-a-distance-via-shh)
       - [Gestion des pare-feus](#gestion-des-pare-feus)   
-   - [Windows Server et Windows](#Windows-Server-et-Windows)
-      - [Permissions utilisateurs](#Permissions-utilisateurs)
-      - [Connexion à distance via PowerShell Remoting](#Connexion-à-distance-via-Powershell-Remoting)
-      - [Configurer la politique d'exécution](#Configurer-la-politique-dexécution)
-      - [Gestion des pare-feus](#Gestion-des-pare-feus)  
-2. [Etapes d'installation et configuration des scripts](#Etapes-dinstallation-et-configuration-des-scripts)
-   - [Téléchargement sur la machine](#Téléchargement-sur-la-machine)
-   - [Attribution des permissions nécessaires](#*Attribution-des-permissions-nécessaires)
-3. [Exécution des scripts](#execution-des-scripts)
+   - [Windows Server et Windows](#windows-server-et-windows)
+      - [Permissions utilisateurs](#permissions-utilisateurs)
+      - [Connexion à distance via PowerShell Remoting](#connexion-à-distance-via-powershell-remoting)
+      - [Configurer la politique d'exécution](#configurer-la-politique-dexécution)
+      - [Gestion des pare-feus](#gestion-des-pare-feus)  
+2. [Etapes d'installation et configuration des scripts](#etapes-dinstallation-et-configuration-des-scripts)
+   - [Téléchargement sur la machine](#téléchargement-sur-la-machine)
+   - [Attribution des permissions nécessaires](#Attribution-des-permissions-nécessaires)
+3. [Exécution des scripts](#exécution-des-scripts)
 4. [FAQ](#FAQ)
 
    
 
 ## Prérequis Techniques
 
-### 1. Serveurs Debian et Ubuntu
+### Serveurs Debian et Ubuntu
 
-#### 1.1 Permissions utilisateurs
+#### 1 Permissions utilisateurs
 L'utilisateur distant doit avoir les permissions nécessaires pour exécuter les commandes que vous souhaitez. Pour des actions administratives, il est recommandé d'avoir des privilèges `sudo`.
 Certains script devront s'exécuter avec le root.
 
-#### 1.2 Connexion à distance via SSH
+#### 2 Connexion à distance via SSH
 a. **Installation de SSH :**
    Sur chaque machine Debian/Ubuntu, vous devez vous assurer que le service SSH est installé et actif.
    ```bash
@@ -51,7 +51,7 @@ c. **Vérification de la connectivité SSH** :
    ```bash
    ssh user@adresse_ip
    ```
-#### 1.3 Gestion des pare-feus
+#### 3 Gestion des pare-feus
 
 Pour la gestion du pare-feu le script utilise la commande **UFW** qui n'est pas installer par défaut sur Debian et Ubuntu voici comment l'installer 
 
@@ -69,13 +69,13 @@ c. **Vérifier le statut de UFW** :
 
 
 
-### 2. Windows Server et Windows 
+### Windows Server et Windows 
 
-#### 2.1 Permissions utilisateurs
+#### 1 Permissions utilisateurs
 
    L'utilisateur doit disposer de privilèges d'administrateur sur la machine distante  Windows.
 
-#### 2.2 Connexion à distance via PowerShell Remoting
+#### 2 Connexion à distance via PowerShell Remoting
 
 a. **Activer le remoting** :
    Ouvrir une session PowerShell en tant qu'administrateur et exécutez la commande suivante sur chaque machine Windows :
@@ -99,7 +99,7 @@ c. **Tester la connexion à distance**
 	`Enter-PSSession -ComputerName "<IPdeLOrdinateurDistant>" -Credential ""`
 
 
-#### 2.3 Configurer la politique d'exécution
+#### 3 Configurer la politique d'exécution
    Si nécessaire, ajustez la politique d'exécution des scripts PowerShell pour autoriser l'exécution à distance :
    
    ```powershell
@@ -107,14 +107,14 @@ c. **Tester la connexion à distance**
    ```
 
    
-### 2.4 Gestion des pare-feus 
+### 4 Gestion des pare-feus 
 
 Pour ce projet les pare-feu ont été désactivé donc aucune gestion n'est requise
 
 
 ## Etapes d'installation et configuration des scripts
 
-1. **Téléchargement sur la machine** : 
+1. Téléchargement sur la machine : 
 
 a ) Installer git 
 
@@ -145,7 +145,7 @@ git clone "git@github.com:WildCodeSchoo/TSSR_PARIS_0924_P2_G3.git"
    - Pour Debian/Ubuntu :  `script_debian.sh`
    - Pour Windows : `script_windows.ps1`
 
-2. **Attribution des permissions nécessaires** :
+2. Attribution des permissions nécessaires :
    
    2.1 Pour Ubuntu
    Pour exécuter le script sur les machines distantes, vous devrez vous assurer que l'utilisateur a les droits d'exécution :
