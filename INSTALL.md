@@ -15,7 +15,7 @@
       - [Gestion des pare-feus](#Gestion-des-pare-feus)  
 2. [Etapes d'installation et configuration des scripts](#Etapes-dinstallation-et-configuration-des-scripts)
    - [Téléchargement sur la machine](#Téléchargement-sur-la-machine)
-   - [*Attribution des permissions nécessaires](#*Attribution-des-permissions-nécessaires)
+   - [Attribution des permissions nécessaires](#*Attribution-des-permissions-nécessaires)
 3. [Exécution des scripts](#execution-des-scripts)
 4. [FAQ]
 
