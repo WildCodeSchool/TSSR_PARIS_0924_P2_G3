@@ -1,6 +1,6 @@
 <#
 .SYNOPSIS
-    Script de gestion des utilisateurs et des groupes en PowerShell.
+    Script de gestion des utilisateurs et des groupes en PowerShell à distance.
 #>
 
 # Définition des couleurs
@@ -16,17 +16,90 @@ function Log {
     Add-Content -Path $LOG_FILE -Value "$(Get-Date -Format "yyyy-MM-dd HH:mm:ss") - $($args -join ' ')"
 }
 
-# Demande le nom d'utilisateur
-function Get-UserName {
-    param (
-        [string]$Prompt
-    )
-    Read-Host $Prompt
+# Demande les informations de connexion
+function Get-RemoteConnectionInfo {
+    $global:RemoteUser = Read-Host "Entrez le nom d'utilisateur distant"
+    $global:RemoteHost = Read-Host "Entrez l'adresse IP ou le nom de la machine distante"
+    $global:Creds = Get-Credential -UserName $RemoteUser -Message "Entrez les informations d'identification pour $RemoteUser@$RemoteHost"
 }
 
-# Demande le nom de groupe
-function Get-GroupName {
-    Read-Host "Entrez le nom du groupe"
+# Fonction d'exécution de commandes à distance
+function Execute-RemoteCommand {
+    param (
+        [string]$Command
+    )
+    Invoke-Command -ComputerName $RemoteHost -Credential $Creds -ScriptBlock {
+        param ($Command) Invoke-Expression $Command
+    } -ArgumentList $Command
+}
+
+# Fonction de création d'utilisateur
+function Create-User {
+    Clear-Host
+    $USERNAME = Read-Host "Entrez le nom d'utilisateur à créer"
+    Log "Début de la création de l'utilisateur $USERNAME sur $RemoteHost"
+
+    Execute-RemoteCommand -Command "if (!(Get-LocalUser -Name '$USERNAME' -ErrorAction SilentlyContinue)) { New-LocalUser -Name '$USERNAME' -NoPassword -FullName '$USERNAME'; 'Utilisateur $USERNAME créé !' } else { 'Utilisateur $USERNAME existe déjà.' }"
+
+    Log "Fin de la création de l'utilisateur $USERNAME sur $RemoteHost"
+    Ask-Continue
+}
+
+# Fonction pour changer le mot de passe d'un utilisateur
+function Change-Password {
+    Clear-Host
+    $USERNAME = Read-Host "Entrez le nom d'utilisateur pour changer le mot de passe"
+    Log "Début du changement de mot de passe pour $USERNAME sur $RemoteHost"
+
+    $NewPassword = Read-Host "Entrez le nouveau mot de passe" -AsSecureString
+    $ScriptBlock = {
+        param ($User, $Password)
+        Set-LocalUser -Name $User -Password $Password
+        "Mot de passe changé avec succès pour l'utilisateur $User."
+    }
+
+    Invoke-Command -ComputerName $RemoteHost -Credential $Creds -ScriptBlock $ScriptBlock -ArgumentList $USERNAME, $NewPassword
+
+    Log "Fin du changement de mot de passe pour $USERNAME sur $RemoteHost"
+    Ask-Continue
+}
+
+# Fonction de suppression d'utilisateur
+function Delete-User {
+    Clear-Host
+    $USERNAME = Read-Host "Entrez le nom d'utilisateur à supprimer"
+    Log "Début de la suppression de l'utilisateur $USERNAME sur $RemoteHost"
+
+    Execute-RemoteCommand -Command "if (Get-LocalUser -Name '$USERNAME' -ErrorAction SilentlyContinue) { Remove-LocalUser -Name '$USERNAME'; 'Utilisateur $USERNAME supprimé.' } else { 'Utilisateur $USERNAME introuvable.' }"
+
+    Log "Fin de la suppression de l'utilisateur $USERNAME sur $RemoteHost"
+    Ask-Continue
+}
+
+# Fonction d'ajout d'un utilisateur à un groupe
+function Add-ToGroup {
+    Clear-Host
+    $USERNAME = Read-Host "Entrez le nom d'utilisateur à ajouter au groupe"
+    $GROUPNAME = Read-Host "Entrez le nom du groupe"
+    Log "Début de l'ajout de $USERNAME au groupe $GROUPNAME sur $RemoteHost"
+
+    Execute-RemoteCommand -Command "if (Get-LocalUser -Name '$USERNAME' -ErrorAction SilentlyContinue -and Get-LocalGroup -Name '$GROUPNAME' -ErrorAction SilentlyContinue) { Add-LocalGroupMember -Group '$GROUPNAME' -Member '$USERNAME'; 'Utilisateur $USERNAME ajouté au groupe $GROUPNAME.' } else { 'Utilisateur ou groupe introuvable.' }"
+
+    Log "Fin de l'ajout de $USERNAME au groupe $GROUPNAME sur $RemoteHost"
+    Ask-Continue
+}
+
+# Fonction pour retirer un utilisateur d'un groupe
+function Remove-FromGroup {
+    Clear-Host
+    $USERNAME = Read-Host "Entrez le nom d'utilisateur à retirer du groupe"
+    $GROUPNAME = Read-Host "Entrez le nom du groupe"
+    Log "Début du retrait de $USERNAME du groupe $GROUPNAME sur $RemoteHost"
+
+    Execute-RemoteCommand -Command "if (Get-LocalUser -Name '$USERNAME' -ErrorAction SilentlyContinue -and Get-LocalGroup -Name '$GROUPNAME' -ErrorAction SilentlyContinue) { Remove-LocalGroupMember -Group '$GROUPNAME' -Member '$USERNAME'; 'Utilisateur $USERNAME retiré du groupe $GROUPNAME.' } else { 'Utilisateur ou groupe introuvable.' }"
+
+    Log "Fin du retrait de $USERNAME du groupe $GROUPNAME sur $RemoteHost"
+    Ask-Continue
 }
 
 # Confirmation pour continuer ou quitter
@@ -39,130 +112,6 @@ function Ask-Continue {
         exit
     }
 }
-# Fonction de création d'utilisateur
-function Create-User {
-    Clear-Host
-    $USERNAME = Get-UserName -Prompt "Entrez le nom d'utilisateur à créer"
-    Log "Début de la création de l'utilisateur $USERNAME"
-        if (Get-LocalUser -Name $USERNAME -ErrorAction SilentlyContinue) {
-        Write-Host "$USERNAME existe déjà" -ForegroundColor Red
-    } else {
-        New-LocalUser -Name $USERNAME -NoPassword -FullName $USERNAME
-        Write-Host "Utilisateur $USERNAME créé !" -ForegroundColor Green
-    }
-
-    Log "Fin de la création de l'utilisateur $USERNAME"
-    Ask-Continue
-}
-
-# Fonction pour changer le mot de passe d'un utilisateur
-function Change-Password {
-    Clear-Host
-    $USERNAME = Get-UserName -Prompt "Entrez le nom d'utilisateur pour changer le mot de passe"
-    Log "Début du changement de mot de passe pour $USERNAME"
-
-    if (Get-LocalUser -Name $USERNAME -ErrorAction SilentlyContinue) {
-        $NewPassword = Read-Host "Entrez le nouveau mot de passe" -AsSecureString
-        Set-LocalUser -Name $USERNAME -Password $NewPassword
-        Write-Host "Mot de passe changé avec succès" -ForegroundColor Green
-    } else {
-        Write-Host "Utilisateur $USERNAME introuvable" -ForegroundColor Red
-    }
-
-    Log "Fin du changement de mot de passe pour $USERNAME"
-    Ask-Continue
-}
-
-# Fonction de suppression d'utilisateur
-function Delete-User {
-    Clear-Host
-    $USERNAME = Get-UserName -Prompt "Entrez le nom d'utilisateur à supprimer"
-    Log "Début de la suppression de l'utilisateur $USERNAME"
-
-    if (Get-LocalUser -Name $USERNAME -ErrorAction SilentlyContinue) {
-        Remove-LocalUser -Name $USERNAME
-        Write-Host "Utilisateur $USERNAME supprimé !" -ForegroundColor Green
-    } else {
-        Write-Host "Utilisateur $USERNAME introuvable" -ForegroundColor Red
-    }
-
-    Log "Fin de la suppression de l'utilisateur $USERNAME"
-    Ask-Continue
-}
-
-# Fonction de désactivation d'utilisateur
-function Disable-User {
-    Clear-Host
-    $USERNAME = Get-UserName -Prompt "Entrez le nom d'utilisateur à désactiver"
-    Log "Début de la désactivation de l'utilisateur $USERNAME"
-
-    if (Get-LocalUser -Name $USERNAME -ErrorAction SilentlyContinue) {
-        Disable-LocalUser -Name $USERNAME
-        Write-Host "Utilisateur $USERNAME désactivé !" -ForegroundColor Green
-    } else {
-        Write-Host "Utilisateur $USERNAME introuvable" -ForegroundColor Red
-    }
-
-    Log "Fin de la désactivation de l'utilisateur $USERNAME"
-    Ask-Continue
-}
-
-# Fonction d'ajout d'un utilisateur à un groupe
-function Add-ToGroup {
-    Clear-Host
-    $USERNAME = Get-UserName -Prompt "Entrez le nom d'utilisateur à ajouter au groupe"
-    $GROUPNAME = Get-GroupName -Prompt "Entrez le nom du groupe"
-    Log "Début de l'ajout de $USERNAME au groupe $GROUPNAME"
-
-# Vérification de l'utilisateur et du groupe
-    $userExists = Get-LocalUser -Name $USERNAME -ErrorAction SilentlyContinue
-    $groupExists = Get-LocalGroup -Name $GROUPNAME -ErrorAction SilentlyContinue
-
-        if ($userExists -and $groupExists) {
-            try {
-                Add-LocalGroupMember -Group $GROUPNAME -Member $USERNAME -ErrorAction Stop
-                Write-Host "$USERNAME ajouté au groupe $GROUPNAME !" -ForegroundColor Green
-            } catch {
-                Write-Host "Erreur lors de l'ajout : $($_.Exception.Message)" -ForegroundColor Red
-            }
-            } else {
-    Write-Host "Utilisateur ou groupe introuvable" -ForegroundColor Red
-    }      
-   
-    Log "Fin de l'ajout de $USERNAME au groupe $GROUPNAME"
-    Ask-Continue
-}
-
-# Fonction pour retirer un utilisateur d'un groupe
-function Remove-FromGroup {
-    Clear-Host
-    $USERNAME = Get-UserName -Prompt "Entrez le nom d'utilisateur à retirer du groupe"
-    $GROUPNAME = Get-GroupName -Prompt "Entrez le nom du groupe"
-    Log "Début du retrait de $USERNAME du groupe $GROUPNAME"
-
-# Vérification de l'utilisateur et du groupe
-    $userExists = Get-LocalUser -Name $USERNAME -ErrorAction SilentlyContinue
-    $groupExists = Get-LocalGroup -Name $GROUPNAME -ErrorAction SilentlyContinue
-    if ($userExists -and $groupExists) {
-        try {
-            Remove-LocalGroupMember -Group $GROUPNAME -Member $USERNAME -ErrorAction Stop
-            Write-Host "$USERNAME retiré du groupe $GROUPNAME !" -ForegroundColor Green
-        } catch {
-            Write-Host "Erreur lors du du groupe : $($_.Exception.Message)" -ForegroundColor Red
-        }
-        } else {
-Write-Host "Utilisateur ou groupe introuvable" -ForegroundColor Red
-}    
-   # if (Get-LocalUser -Name $USERNAME -ErrorAction SilentlyContinue -and Get-LocalGroup -Name $GROUPNAME -ErrorAction SilentlyContinue) {
-    #    Remove-LocalGroupMember -Group $GROUPNAME -Member $USERNAME
-     #   Write-Host "$USERNAME retiré du groupe $GROUPNAME !" -ForegroundColor Green
-    #} else {
-    #    Write-Host "Utilisateur ou groupe introuvable" -ForegroundColor Red
-    #}
-
-    Log "Fin du retrait de $USERNAME du groupe $GROUPNAME"
-    Ask-Continue
-}
 
 # Menu principal
 do {
@@ -171,11 +120,10 @@ do {
     Write-Host "1) Création d'un utilisateur"
     Write-Host "2) Changement de mot de passe"
     Write-Host "3) Suppression d'un utilisateur"
-    Write-Host "4) Désactivation d'un utilisateur"
-    Write-Host "5) Ajout à un groupe"
-    Write-Host "6) Retrait d'un groupe"
-    Write-Host "7) Revenir au Menu principal"
-    Write-Host "8) Quitter"
+    Write-Host "4) Ajout à un groupe"
+    Write-Host "5) Retrait d'un groupe"
+    Write-Host "6) Revenir au Menu principal"
+    Write-Host "7) Quitter"
 
     $choice = Read-Host "Choisissez une option"
 
@@ -183,16 +131,13 @@ do {
         1 { Create-User }
         2 { Change-Password }
         3 { Delete-User }
-        4 { Disable-User }
-        5 { Add-ToGroup }
-        6 { Remove-FromGroup }
-        7 { return  C:\Users\Administrator\Documents\TSSR_PARIS_0924_P2_G3\script_windows.ps1 }  # Retour au menu principal
-        8 { exit }
-    
+        4 { Add-ToGroup }
+        5 { Remove-FromGroup }
+        6 { . "C:\Users\Administrator\Documents\TSSR_PARIS_0924_P2_G3\script_windows.ps1" }
+        7 { exit }
         default {
             Write-Host "Option incorrecte, veuillez réessayer." -ForegroundColor Red
             Pause
         }
     }
 } while ($true)
-
