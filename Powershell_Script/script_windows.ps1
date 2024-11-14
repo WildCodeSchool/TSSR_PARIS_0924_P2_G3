@@ -19,8 +19,8 @@ function Menu-GestionUser {
         $choice = Read-Host -Prompt "Choisissez une option"
 
         switch ($choice) {
-            1 { C:\Users\Administrator\Documents\TSSR_PARIS_0924_P2_G3\script_action_user.ps1 } # Remplacez par le bon chemin si nécessaire
-            2 { .\script_info_user.ps1 }
+            1 { C:\Users\Administrateur.WIN-CRQM0S4BP56\Documents\TSSR_PARIS_0924_P2_G3\Powershell_Script\script_action_user.ps1 } # Remplacez par le bon chemin si nécessaire
+            2 { C:\Users\Administrateur.WIN-CRQM0S4BP56\Documents\TSSR_PARIS_0924_P2_G3\Powershell_Script\script_info_user.ps1 }
             3 { return  }
             4 { exit }
             default { Write-Output "Option incorrecte" }
@@ -41,8 +41,8 @@ function Menu-GestionComputer {
         $choice = Read-Host -Prompt "Choisissez une option"
 
         switch ($choice) {
-            1 { .\script_action_computer.ps1 } # Remplacez par le bon chemin si nécessaire
-            2 { .\script_info_computer.ps1 }
+            1 { C:\Users\Administrateur.WIN-CRQM0S4BP56\Documents\TSSR_PARIS_0924_P2_G3\Powershell_Script\script_action_computer.ps1 } # Remplacez par le bon chemin si nécessaire
+            2 { C:\Users\Administrateur.WIN-CRQM0S4BP56\Documents\TSSR_PARIS_0924_P2_G3\Powershell_Script\script_info_computer.ps1 } # Remplacez par le bon chemin si nécessaire
             3 { return }
             4 { exit }
             default { Write-Output "Option incorrecte" }
