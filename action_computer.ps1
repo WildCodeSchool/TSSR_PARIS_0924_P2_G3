@@ -1,5 +1,8 @@
-# Activer PowerShell Remoting sur la machine distante
+# Demander l'IP ou le nom de la machine distante
 $remoteComputer = Read-Host "Veuillez entrer l'IP ou le nom de la machine distante"
+
+# Demander les informations d'identification une seule fois
+$credential = Get-Credential
 
 # Fonction pour afficher le menu
 function Show-Menu {
@@ -26,11 +29,12 @@ function Show-Menu {
 function Execute-RemoteCommand {
     param (
         [string]$remoteComputer,
-        [scriptblock]$scriptBlock
+        [scriptblock]$scriptBlock,
+        [pscredential]$credential
     )
 
     try {
-        Invoke-Command -ComputerName $remoteComputer -ScriptBlock $scriptBlock -Credential (Get-Credential) -ErrorAction Stop
+        Invoke-Command -ComputerName $remoteComputer -ScriptBlock $scriptBlock -Credential $credential -ErrorAction Stop
     } catch {
         Write-Host "Erreur lors de l'exécution de la commande à distance : $_"
     }
@@ -45,30 +49,32 @@ while (-not $exitScript) {
     switch ($choice) {
         '1' {
             Write-Host "Arrêt demandé sur $remoteComputer."
-            Execute-RemoteCommand -remoteComputer $remoteComputer -scriptBlock { Shutdown-Computer -Force }
+            Execute-RemoteCommand -remoteComputer $remoteComputer -scriptBlock { Shutdown-Computer -Force } -credential $credential
         }
         '2' {
             Write-Host "Redémarrage demandé sur $remoteComputer."
-            Execute-RemoteCommand -remoteComputer $remoteComputer -scriptBlock { Restart-Computer -Force }
+            Execute-RemoteCommand -remoteComputer $remoteComputer -scriptBlock { Restart-Computer -Force } -credential $credential
         }
         '3' {
             Write-Host "Verrouillage demandé sur $remoteComputer."
-            Execute-RemoteCommand -remoteComputer $remoteComputer -scriptBlock { rundll32.exe user32.dll,LockWorkStation }
+            Execute-RemoteCommand -remoteComputer $remoteComputer -scriptBlock { rundll32.exe user32.dll,LockWorkStation } -credential $credential
         }
         '4' {
             Write-Host "Mise à jour du système demandée sur $remoteComputer."
             Execute-RemoteCommand -remoteComputer $remoteComputer -scriptBlock {
                 Start-Process -FilePath "powershell" -ArgumentList "-Command & {Install-WindowsUpdate -AcceptAll -AutoReboot}" -Wait
-            }
+            } -credential $credential
         }
         '5' {
-            $dirPath = Read-Host "Veuillez entrer le chemin du répertoire à créer"
-            Write-Host "Création du répertoire $dirPath sur $remoteComputer."
-            Execute-RemoteCommand -remoteComputer $remoteComputer -scriptBlock {
-                param($dirPath)
-                New-Item -Path $dirPath -ItemType Directory -Force
-            } -ArgumentList $dirPath
-        }
+                $dirPath = Read-Host "Veuillez entrer le chemin du répertoire à créer"
+                Write-Host "Création du répertoire $dirPath sur $remoteComputer."
+            
+                # Exécution de la commande à distance avec le paramètre correctement transmis
+                Execute-RemoteCommand -remoteComputer $remoteComputer -scriptBlock {
+                    param($dirPath)  # Paramètre attendu dans le scriptblock à distance
+                    New-Item -Path $dirPath -ItemType Directory -Force  # Utilisation de ce paramètre
+                } -ArgumentList $dirPath -credential $credential
+            }
         '6' {
             $dirPath = Read-Host "Veuillez entrer le chemin du répertoire à modifier"
             $newName = Read-Host "Veuillez entrer le nouveau nom du répertoire"
@@ -76,7 +82,7 @@ while (-not $exitScript) {
             Execute-RemoteCommand -remoteComputer $remoteComputer -scriptBlock {
                 param($dirPath, $newName)
                 Rename-Item -Path $dirPath -NewName $newName
-            } -ArgumentList $dirPath, $newName
+            } -ArgumentList $dirPath, $newName -credential $credential
         }
         '7' {
             $dirPath = Read-Host "Veuillez entrer le chemin du répertoire à supprimer"
@@ -84,11 +90,11 @@ while (-not $exitScript) {
             Execute-RemoteCommand -remoteComputer $remoteComputer -scriptBlock {
                 param($dirPath)
                 Remove-Item -Path $dirPath -Recurse -Force
-            } -ArgumentList $dirPath
+            } -ArgumentList $dirPath -credential $credential
         }
         '8' {
             Write-Host "Prise de main à distance demandée sur $remoteComputer."
-            Execute-RemoteCommand -remoteComputer $remoteComputer -scriptBlock { mstsc }
+            Execute-RemoteCommand -remoteComputer $remoteComputer -scriptBlock { mstsc } -credential $credential
         }
         '9' {
             $ruleName = Read-Host "Veuillez entrer le nom de la règle de pare-feu"
@@ -97,15 +103,15 @@ while (-not $exitScript) {
             Execute-RemoteCommand -remoteComputer $remoteComputer -scriptBlock {
                 param($ruleName, $port)
                 New-NetFirewallRule -DisplayName $ruleName -Direction Inbound -Protocol TCP -LocalPort $port -Action Allow
-            } -ArgumentList $ruleName, $port
+            } -ArgumentList $ruleName, $port -credential $credential
         }
         '10' {
             Write-Host "Activation du pare-feu sur $remoteComputer."
-            Execute-RemoteCommand -remoteComputer $remoteComputer -scriptBlock { Set-NetFirewallProfile -All -Enabled True }
+            Execute-RemoteCommand -remoteComputer $remoteComputer -scriptBlock { Set-NetFirewallProfile -All -Enabled True } -credential $credential
         }
         '11' {
             Write-Host "Désactivation du pare-feu sur $remoteComputer."
-            Execute-RemoteCommand -remoteComputer $remoteComputer -scriptBlock { Set-NetFirewallProfile -All -Enabled False }
+            Execute-RemoteCommand -remoteComputer $remoteComputer -scriptBlock { Set-NetFirewallProfile -All -Enabled False } -credential $credential
         }
         '12' {
             $softwareName = Read-Host "Veuillez entrer le nom du logiciel à installer"
@@ -113,7 +119,7 @@ while (-not $exitScript) {
             Execute-RemoteCommand -remoteComputer $remoteComputer -scriptBlock {
                 param($softwareName)
                 Start-Process -FilePath "msiexec" -ArgumentList "/i $softwareName"
-            } -ArgumentList $softwareName
+            } -ArgumentList $softwareName -credential $credential
         }
         '13' {
             $softwareName = Read-Host "Veuillez entrer le nom du logiciel à désinstaller"
@@ -121,7 +127,7 @@ while (-not $exitScript) {
             Execute-RemoteCommand -remoteComputer $remoteComputer -scriptBlock {
                 param($softwareName)
                 Start-Process -FilePath "msiexec" -ArgumentList "/x $softwareName"
-            } -ArgumentList $softwareName
+            } -ArgumentList $softwareName -credential $credential
         }
         '14' {
             $scriptPath = Read-Host "Veuillez entrer le chemin du script à exécuter"
@@ -129,7 +135,7 @@ while (-not $exitScript) {
             Execute-RemoteCommand -remoteComputer $remoteComputer -scriptBlock { 
                 param($scriptPath)
                 & $scriptPath
-            } -ArgumentList $scriptPath
+            } -ArgumentList $scriptPath -credential $credential
         }
         'Q' {
             $exitScript = $true
