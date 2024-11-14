@@ -7,7 +7,7 @@
    - [Server Debian et Ubuntu](#server-debian-et-ubuntu)
       - [Permissions utilisateurs](#permissions-utilisateurs)
       - [Connexion à distance via SSH](#Connexion-a-distance-via-SSH)
-      - [Gestion des pare-feus : UFW](#gestion-des-pare-feus-:-UFW)   
+      - [Gestion des pare-feus](#gestion-des-pare-feus)   
    - [Windows Server et Windows](#Windows-Server-et-Windows)
       - [Permissions utilisateurs](#Permissions-utilisateurs)
       - [Connexion à distance via PowerShell Remoting](#Connexion-à-distance-via-Powershell-Remoting)
@@ -51,7 +51,7 @@ Certains script devront s'exécuter avec le root.
    ```bash
    ssh user@adresse_ip
    ```
-#### 1.3 Gestion des pare-feus : UFW
+#### 1.3 Gestion des pare-feus
 
 Pour la gestion du pare-feu le script utilise la commande **UFW** qui n'est pas installer par défaut sur Debian et Ubuntu voici comment l'installer 
 
