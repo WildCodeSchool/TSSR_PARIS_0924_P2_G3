@@ -17,7 +17,7 @@
    - [Téléchargement sur la machine](#Téléchargement-sur-la-machine)
    - [Attribution des permissions nécessaires](#*Attribution-des-permissions-nécessaires)
 3. [Exécution des scripts](#execution-des-scripts)
-4. [FAQ]
+4. [FAQ](#FAQ)
 
    
 
