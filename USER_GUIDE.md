@@ -8,8 +8,8 @@
    - [Fonctions communes à chaque script](#fonctions-communes-à-chaque-script) 
    - [Commandes préconfigurées](#commandes-préconfigurées)
 1. [Utilisation de Base](#utilisation-de-base)
-   - [Exécution du Script Debian/Ubuntu via SSH](#execution-du-script-debianubuntu-via-ssh)
-   - [Exécution du Script Windows via PowerShell](#execution-du-script-windows-via-powershell)
+   - [Exécution du Script Debian/Ubuntu via SSH](#exécution-du-script-debianubuntu-via-ssh)
+   - [Exécution du Script Windows via PowerShell](#exécution-du-script-windows-via-powershell)
 
 2. [Problèmes courants et solutions](#problèmes-courants-et-solutions)
 3. [Conclusion](#conclusion)
@@ -130,7 +130,7 @@ Pour changer de client il faut sortir du script et relancer une nouvelle session
 
 ## Utilisation de Base
 
-1. **Exécution du Script Debian/Ubuntu via SSH**
+### Exécution du Script Debian/Ubuntu via SSH
 
  1. Ouvrir un terminal sur la machine locale.
 2. Exécuter le script en utilisant la commande suivante :
@@ -146,7 +146,7 @@ Pour changer de client il faut sortir du script et relancer une nouvelle session
    - Dans certains script le nom de l'utilisateur sur lequel l'action doit être effectué
 5. Le résultat de l'exécution sera affiché à l'écran et enregistré dans le fichier `log.event`
 
- 2. **Exécution du Script Windows via PowerShell**
+ ### Exécution du Script Windows via PowerShell
 
 1. Ouvrir PowerShell en tant qu'administrateur sur la machine locale.
 2. Exécuter le script PowerShell avec la commande suivante :
