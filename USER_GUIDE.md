@@ -138,7 +138,10 @@ Pour changer de client il faut sortir du script et relancer une nouvelle session
    ./script_debian.sh
    ```
 3. Le script affiche un menu avec les options disponibles, les commandes sont déjà configurés pour s'exécuter à distance. 
-![menushell](https://github.com/user-attachments/assets/63c7b618-c95f-4ff1-8f70-a9947d7fe8b0)
+
+![menudeb](https://github.com/user-attachments/assets/70ed3977-f027-4163-86fb-c671a7232736)
+
+
 Suivez les instructions pour naviguer dans le menu.
 
 4. Le script demandera à l'utilisateur de spécifier les informations suivantes :
@@ -156,7 +159,8 @@ Suivez les instructions pour naviguer dans le menu.
    ```
 3. Le script affiche un menu avec les options disponibles, les commandes sont déjà configuré pour s'exécuter à distance.
 
-![menuwin](https://github.com/user-attachments/assets/919cf26a-a547-4306-83af-03a554b1d1b7)
+![menuwin](https://github.com/user-attachments/assets/4af9ed62-f07c-42ab-aee7-27724ceaaf3c)
+
 
 
 Suivez les instructions pour naviguer dans les options. 
