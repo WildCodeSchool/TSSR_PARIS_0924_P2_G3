@@ -80,14 +80,14 @@ function Menu_gestion_computer() {
 log_user () {
     read -p "Consultation du fichier evt_log.log pour quel utilisateur : " LOG_USER
     log "Extrait du journal evt_log.log pour l'utilisateur $LOG_USER"
-    cat "/home/wilder/Documents/log_evt.log_$LOG_DATE" | grep "$LOG_USER" 
+    cat "/home/wilder/Documents/log_evt_$LOG_DATE.log" | grep "$LOG_USER" 
     echo "Fin de consultation du fichier evt_log.log pour utilisateur"
     }
 
 log_computer (){
 read -p "Consultation du fichier evt_log.log pour quel machine : " LOG_COMP
     echo "Extrait du journal evt_log.log pour la machine $LOG_COMP"
-    cat "/home/wilder/Documents/log_evt.log_$LOG_DATE" | grep "$LOG_COMP"
+    cat "/home/wilder/Documents/log_evt_$LOG_DATE.log" | grep "$LOG_COMP"
     echo "Fin de consultation du fichier evt_log.log pour la machine"
 }
 
