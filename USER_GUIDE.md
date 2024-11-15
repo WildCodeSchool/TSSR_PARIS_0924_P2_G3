@@ -155,10 +155,13 @@ Suivez les instructions pour naviguer dans le menu.
    .\script_windows.ps1
    ```
 3. Le script affiche un menu avec les options disponibles, les commandes sont déjà configuré pour s'exécuter à distance.
-![menushell](https://github.com/user-attachments/assets/7796cf1b-fe82-46b8-8926-035d7223f011)
+
+![menuwin](https://github.com/user-attachments/assets/919cf26a-a547-4306-83af-03a554b1d1b7)
+
+
 Suivez les instructions pour naviguer dans les options. 
 
-6. Le script demandera à l'utilisateur de spécifier les informations suivantes :
+4. Le script demandera à l'utilisateur de spécifier les informations suivantes :
 - **Adresse IP ou nom de la machine distante** : Entrez l'IP de la machine distante (ex : `172.16.10.20`).
 - **Nom de l'utilisateur distant** : Entrez l'utilisateur sous lequel vous souhaitez vous connecter à la machine distante.(ex: wilder)
    - Dans certains script le nom de l'utilisateur sur lequel l'action doit être effectué
